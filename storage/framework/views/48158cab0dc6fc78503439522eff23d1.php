@@ -10,13 +10,7 @@
 <?php $component->withAttributes([]); ?>
     
     
-    <div class="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-black">
-                
-        <div class="fixed inset-0 pointer-events-none overflow-hidden">
-            <div class="absolute -top-96 -left-96 w-96 h-96 bg-gradient-to-br from-cyan-500/20 to-blue-600/20 rounded-full blur-3xl animate-pulse"></div>
-            <div class="absolute -bottom-96 -right-96 w-96 h-96 bg-gradient-to-br from-pink-500/20 to-purple-600/20 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
-            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-br from-yellow-400/10 to-orange-500/10 rounded-full blur-3xl"></div>
-        </div>
+    <div class="min-h-screen">
 
         <main class="max-w-7xl mx-auto px-4 pt-4 pb-6" x-data="{ showFilter: false }">
             
