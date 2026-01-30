@@ -28,6 +28,11 @@ class ProductController extends Controller
             });
         }
 
+        // Filter by category
+        if ($request->has('category') && !empty($request->category)) {
+            $query->where('category_id', $request->category);
+        }
+
         // Filter by subcategories
         if ($request->has('subcategories') && !empty($request->subcategories)) {
             $query->whereIn('subcategory_id', $request->subcategories);

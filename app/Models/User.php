@@ -49,4 +49,10 @@ class User extends Authenticatable
     {
         return $this->role === '1';
     }
+
+    // Cart relationship
+    public function cart()
+    {
+        return $this->hasOne(Cart::class);
+    }
 }

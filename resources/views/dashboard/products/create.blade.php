@@ -18,6 +18,9 @@
 
         <x-form.field>
             <x-form.label name="sizes" />
+            <p class="text-xs text-gray-500 mb-2">
+                @if(app()->getLocale() == 'ku') سایزەکان هەڵبژێرە @else Select sizes @endif
+            </p>
             <div class="flex justify-start items-center flex-wrap gap-4">
                 @foreach ($sizes as $size)
                     <x-form.checkbox name="{{ $size->name }}" field="sizes[{{ $size->name }}]"
@@ -27,12 +30,39 @@
             <x-form.error name="sizes[]" />
         </x-form.field>
 
-        <div class="bg-slate-300 p-2 rounded w-full">
-            <x-form.label name="quantities" class="font-bold" />
-            <div id="size-container">
-                {{-- Input added dynamicly --}}
+        {{-- Quantities Section --}}
+        <div class="bg-slate-200 p-4 rounded-xl w-full">
+            <label class="font-bold text-lg text-gray-800">
+                @if(app()->getLocale() == 'ku') ژمارەی هەر سایز @elseif(app()->getLocale() == 'ar') كمية كل مقاس @else Quantity per Size @endif
+            </label>
+            <div id="size-container" class="space-y-2 mt-3">
+                {{-- Input added dynamically --}}
             </div>
             <x-form.error name='quantities' />
+        </div>
+
+        {{-- Colors Section - Separate --}}
+        <div class="bg-purple-50 p-4 rounded-xl w-full border-2 border-purple-200">
+            <label class="font-bold text-lg text-purple-800 flex items-center gap-2">
+                <i class="fa-solid fa-palette"></i>
+                @if(app()->getLocale() == 'ku') رەنگەکان @elseif(app()->getLocale() == 'ar') الألوان @else Colors @endif
+            </label>
+            <p class="text-sm text-purple-600 mb-3">
+                @if(app()->getLocale() == 'ku') رەنگ هەڵبژێرە @else Select Color @endif
+            </p>
+            <div class="grid grid-cols-4 sm:grid-cols-7 gap-3">
+                @foreach ($colors as $index => $color)
+                    <label class="cursor-pointer group" title="{{ $color['name'] }}">
+                        <input type="checkbox" name="product_colors[]" value="{{ $color['name'] }}|{{ $color['code'] }}" class="hidden peer">
+                        <div class="w-12 h-12 rounded-xl border-3 border-gray-300 peer-checked:ring-4 peer-checked:ring-purple-500 peer-checked:ring-offset-2 peer-checked:border-purple-500 hover:scale-110 transition-all shadow-md flex items-center justify-center group-hover:shadow-lg" 
+                             style="background-color: {{ $color['code'] }}; {{ $color['code'] == '#FFFFFF' ? 'border: 2px solid #ddd;' : '' }}">
+                            <i class="fa-solid fa-check text-white opacity-0 peer-checked:opacity-100 drop-shadow-lg" style="{{ $color['code'] == '#FFFFFF' || $color['code'] == '#EAB308' ? 'color: #333;' : '' }}"></i>
+                        </div>
+                        <p class="text-xs text-center mt-1 text-gray-600 font-medium">{{ $color['name'] }}</p>
+                    </label>
+                @endforeach
+            </div>
+            <x-form.error name="product_colors" />
         </div>
 
         <x-form.input name="price" type="number" />
@@ -91,35 +121,49 @@
     </x-form.form>
     <script>
         function validateInput(input) {
-            const minValue = 1;
-
-            // Check if the input value is not a number or is less than the minimum value
+            const minValue = 0;
             if (isNaN(input.value) || input.value < minValue) {
-                // Set the input value to the minimum value
                 input.value = minValue;
             }
         }
 
         function addSizeEntry(name) {
-            // Check if an input with the specified name already exists
-            const existingDiv = document.getElementById(`number${name}`);
+            const existingDiv = document.getElementById(`size-entry-${name}`);
 
-            console.log(existingDiv);
-
-            // If it exists, remove it
             if (existingDiv) {
                 existingDiv.parentNode.removeChild(existingDiv);
-
                 return;
             }
 
-            // Add the new input
             const sizeContainer = document.querySelector("#size-container");
             const sizeEntryHTML = `
-    <x-form.special-input name="${name}" field="quantities" />
-`;
+                <div id="size-entry-${name}" class="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200 shadow-sm">
+                    <span class="font-bold text-gray-700 bg-blue-100 px-4 py-2 rounded-lg min-w-[60px] text-center">${name}</span>
+                    <label class="text-sm text-gray-600">@if(app()->getLocale() == 'ku') ژمارە: @else Qty: @endif</label>
+                    <input type="number" 
+                           name="quantities[${name}]" 
+                           value="0" 
+                           min="0" 
+                           onchange="validateInput(this)"
+                           class="w-24 px-3 py-2 border border-gray-300 rounded-lg text-center focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none">
+                </div>
+            `;
 
             sizeContainer.innerHTML += sizeEntryHTML;
         }
+
+        // Make checkmarks visible when color is selected
+        document.querySelectorAll('input[name="product_colors[]"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const checkIcon = this.nextElementSibling.querySelector('i');
+                if (this.checked) {
+                    checkIcon.classList.remove('opacity-0');
+                    checkIcon.classList.add('opacity-100');
+                } else {
+                    checkIcon.classList.add('opacity-0');
+                    checkIcon.classList.remove('opacity-100');
+                }
+            });
+        });
     </script>
 </x-layouts.dashboard>

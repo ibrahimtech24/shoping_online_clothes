@@ -187,23 +187,65 @@
                         </div>
 
                         
-                        <?php if($product->sizes && $product->sizes->count() > 0): ?>
+                        <?php
+                            $availableColors = $product->productsizes->where('color', '!=', '')->where('color', '!=', null)->where('quantity', '>', 0)->unique('color_code');
+                        ?>
+                        <?php if($availableColors->count() > 0): ?>
                             <div>
-                                <h3 class="text-white font-semibold mb-3">
+                                <h3 class="text-white font-semibold mb-3 flex items-center gap-2">
+                                    <i class="fa-solid fa-palette text-cyan-400"></i>
+                                    <?php echo e(app()->getLocale() == 'ku' ? 'رەنگ هەڵبژێرە' : (app()->getLocale() == 'ar' ? 'اختر اللون' : 'Select Color')); ?>
+
+                                </h3>
+                                <div class="flex flex-row flex-wrap gap-3" id="color-selector">
+                                    <?php $__currentLoopData = $availableColors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $colorItem): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <button type="button" 
+                                                data-color="<?php echo e($colorItem->color); ?>"
+                                                data-color-code="<?php echo e($colorItem->color_code); ?>"
+                                                class="color-btn relative w-10 h-10 rounded-full border-2 border-white/20 hover:border-cyan-500 hover:scale-110 transition-all overflow-hidden group shadow-lg"
+                                                style="background-color: <?php echo e($colorItem->color_code ?? '#888'); ?>;"
+                                                title="<?php echo e($colorItem->color); ?>">
+                                            <span class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <i class="fa-solid fa-check text-white text-xs drop-shadow-lg"></i>
+                                            </span>
+                                        </button>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                </div>
+                                <p class="text-white/50 text-sm mt-2" id="selected-color-name">
+                                    <?php echo e(app()->getLocale() == 'ku' ? 'رەنگێک هەڵبژێرە' : (app()->getLocale() == 'ar' ? 'اختر لوناً' : 'Select a color')); ?>
+
+                                </p>
+                            </div>
+                        <?php endif; ?>
+
+                        
+                        <?php if($product->productsizes && $product->productsizes->count() > 0): ?>
+                            <div>
+                                <h3 class="text-white font-semibold mb-3 flex items-center gap-2">
+                                    <i class="fa-solid fa-ruler text-cyan-400"></i>
                                     <?php echo e(app()->getLocale() == 'ku' ? 'قەبارە هەڵبژێرە' : (app()->getLocale() == 'ar' ? 'اختر المقاس' : 'Select Size')); ?>
 
                                 </h3>
                                 <div class="flex flex-wrap gap-3" id="size-selector">
-                                    <?php $__currentLoopData = $product->sizes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $size): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <?php $__currentLoopData = $product->productsizes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $productSize): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <button type="button" 
-                                                data-size-id="<?php echo e($size->id); ?>"
-                                                data-stock="<?php echo e($size->stock); ?>"
-                                                class="size-btn px-5 py-3 bg-white/5 backdrop-blur-xl border border-white/20 rounded-xl text-white font-medium hover:border-cyan-500/50 hover:bg-cyan-500/10 transition-all <?php echo e($size->stock <= 0 ? 'opacity-40 cursor-not-allowed' : ''); ?>">
-                                            <?php echo e($size->size->name ?? $size->name); ?>
-
+                                                data-size-id="<?php echo e($productSize->size_id); ?>"
+                                                data-size-name="<?php echo e($productSize->size->name ?? 'N/A'); ?>"
+                                                data-stock="<?php echo e($productSize->quantity); ?>"
+                                                data-color="<?php echo e($productSize->color); ?>"
+                                                data-color-code="<?php echo e($productSize->color_code); ?>"
+                                                class="size-btn px-5 py-3 bg-white/5 backdrop-blur-xl border border-white/20 rounded-xl text-white font-medium hover:border-cyan-500/50 hover:bg-cyan-500/10 transition-all flex items-center gap-2 <?php echo e($productSize->quantity <= 0 ? 'opacity-40 cursor-not-allowed line-through' : ''); ?>">
+                                            <?php if($productSize->color_code): ?>
+                                                <span class="w-4 h-4 rounded-full border border-white/30" style="background-color: <?php echo e($productSize->color_code); ?>;"></span>
+                                            <?php endif; ?>
+                                            <span><?php echo e($productSize->size->name ?? 'N/A'); ?></span>
+                                            <?php if($productSize->quantity > 0 && $productSize->quantity <= 5): ?>
+                                                <span class="text-xs text-amber-400">(<?php echo e($productSize->quantity); ?>)</span>
+                                            <?php endif; ?>
                                         </button>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </div>
+                                <p class="text-white/50 text-sm mt-2" id="size-stock-info"></p>
                             </div>
                         <?php endif; ?>
 
@@ -230,7 +272,8 @@
                         <form action="<?php echo e(route('cart.store')); ?>" method="POST" id="add-to-cart-form">
                             <?php echo csrf_field(); ?>
                             <input type="hidden" name="product_id" value="<?php echo e($product->id); ?>">
-                            <input type="hidden" name="size_id" id="selected-size-id" value="">
+                            <input type="hidden" name="size" id="selected-size-id" value="">
+                            <input type="hidden" name="color" id="selected-color" value="">
                             <input type="hidden" name="quantity" id="form-quantity" value="1">
                             
                             <div class="flex flex-col sm:flex-row gap-4">
@@ -312,21 +355,86 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const colorBtns = document.querySelectorAll('.color-btn');
             const sizeBtns = document.querySelectorAll('.size-btn');
             const selectedSizeInput = document.getElementById('selected-size-id');
             const quantityInput = document.getElementById('quantity');
             const formQuantity = document.getElementById('form-quantity');
             const qtyMinus = document.getElementById('qty-minus');
             const qtyPlus = document.getElementById('qty-plus');
+            const selectedColorName = document.getElementById('selected-color-name');
+            const sizeStockInfo = document.getElementById('size-stock-info');
+
+            let selectedColor = null;
+
+            // Color selection
+            if (colorBtns.length > 0) {
+                colorBtns.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        // Remove selection from all
+                        colorBtns.forEach(b => {
+                            b.classList.remove('border-cyan-500', 'ring-2', 'ring-cyan-500/50');
+                            b.querySelector('span').classList.add('opacity-0');
+                            b.querySelector('span').classList.remove('opacity-100');
+                        });
+                        
+                        // Select this one
+                        this.classList.add('border-cyan-500', 'ring-2', 'ring-cyan-500/50');
+                        this.querySelector('span').classList.remove('opacity-0');
+                        this.querySelector('span').classList.add('opacity-100');
+                        
+                        selectedColor = this.dataset.colorCode;
+                        selectedColorName.innerHTML = '<i class="fa-solid fa-check text-cyan-400"></i> ' + this.dataset.color;
+                        
+                        // Filter sizes by color
+                        filterSizesByColor(selectedColor);
+                    });
+                });
+            }
+
+            // Filter sizes by selected color
+            function filterSizesByColor(colorCode) {
+                sizeBtns.forEach(btn => {
+                    const btnColorCode = btn.dataset.colorCode;
+                    if (!colorCode || btnColorCode === colorCode || !btnColorCode) {
+                        btn.style.display = 'flex';
+                    } else {
+                        btn.style.display = 'none';
+                    }
+                });
+                
+                // Clear size selection when color changes
+                sizeBtns.forEach(b => b.classList.remove('border-cyan-500', 'bg-cyan-500/20'));
+                selectedSizeInput.value = '';
+                if (sizeStockInfo) sizeStockInfo.textContent = '';
+            }
 
             // Size selection
             sizeBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
-                    if (this.dataset.stock <= 0) return;
+                    if (parseInt(this.dataset.stock) <= 0) return;
                     
                     sizeBtns.forEach(b => b.classList.remove('border-cyan-500', 'bg-cyan-500/20'));
                     this.classList.add('border-cyan-500', 'bg-cyan-500/20');
                     selectedSizeInput.value = this.dataset.sizeId;
+                    
+                    // Show stock info
+                    const stock = parseInt(this.dataset.stock);
+                    const sizeName = this.dataset.sizeName;
+                    const colorName = this.dataset.color;
+                    
+                    let stockText = '';
+                    <?php if(app()->getLocale() == 'ku'): ?>
+                        stockText = sizeName + (colorName ? ' - ' + colorName : '') + ': ' + stock + ' دانە لە کۆگا';
+                    <?php elseif(app()->getLocale() == 'ar'): ?>
+                        stockText = sizeName + (colorName ? ' - ' + colorName : '') + ': ' + stock + ' قطعة متوفرة';
+                    <?php else: ?>
+                        stockText = sizeName + (colorName ? ' - ' + colorName : '') + ': ' + stock + ' in stock';
+                    <?php endif; ?>
+                    
+                    if (sizeStockInfo) {
+                        sizeStockInfo.innerHTML = '<i class="fa-solid fa-box text-emerald-400"></i> ' + stockText;
+                    }
                 });
             });
 
@@ -341,12 +449,33 @@
 
             qtyPlus.addEventListener('click', function() {
                 let val = parseInt(quantityInput.value);
-                quantityInput.value = val + 1;
-                formQuantity.value = val + 1;
+                // Check max stock
+                const selectedBtn = document.querySelector('.size-btn.border-cyan-500');
+                const maxStock = selectedBtn ? parseInt(selectedBtn.dataset.stock) : 999;
+                
+                if (val < maxStock) {
+                    quantityInput.value = val + 1;
+                    formQuantity.value = val + 1;
+                }
             });
 
             quantityInput.addEventListener('change', function() {
                 formQuantity.value = this.value;
+            });
+
+            // Form validation
+            document.getElementById('add-to-cart-form').addEventListener('submit', function(e) {
+                if (!selectedSizeInput.value) {
+                    e.preventDefault();
+                    <?php if(app()->getLocale() == 'ku'): ?>
+                        alert('تکایە قەبارەیەک هەڵبژێرە!');
+                    <?php elseif(app()->getLocale() == 'ar'): ?>
+                        alert('الرجاء اختيار مقاس!');
+                    <?php else: ?>
+                        alert('Please select a size!');
+                    <?php endif; ?>
+                    return false;
+                }
             });
         });
     </script>

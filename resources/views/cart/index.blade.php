@@ -131,11 +131,14 @@
                                 </div>
 
                                 {{-- Checkout Button --}}
-                                <a href="{{ route('checkout.index') }}" 
-                                   class="w-full py-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold rounded-2xl hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 flex items-center justify-center gap-3">
-                                    <i class="fa-solid fa-lock"></i>
-                                    {{ app()->getLocale() == 'ku' ? 'بڕۆ بۆ پارەدان' : (app()->getLocale() == 'ar' ? 'متابعة الدفع' : 'Proceed to Checkout') }}
-                                </a>
+                                <form action="{{ route('orders.store') }}" method="POST">
+                                    @csrf
+                                    <button type="submit"
+                                       class="w-full py-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold rounded-2xl hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 flex items-center justify-center gap-3">
+                                        <i class="fa-solid fa-lock"></i>
+                                        {{ app()->getLocale() == 'ku' ? 'تەواوکردنی داواکاری' : (app()->getLocale() == 'ar' ? 'إتمام الطلب' : 'Complete Order') }}
+                                    </button>
+                                </form>
 
                                 {{-- Continue Shopping --}}
                                 <a href="{{ route('products.index') }}" 

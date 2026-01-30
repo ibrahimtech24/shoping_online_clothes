@@ -42,22 +42,64 @@ class OrderController extends Controller
         try {
             DB::beginTransaction();
 
-            $order = Order::create([
-                'user_id' => $request->user()->id,
-                'total_price' => $request->total_price,
-            ]);
-
-            foreach (json_decode($request->items) as $item) {
-                $this->createOrderItem($order, $item);
+            // Get cart items directly from database
+            $cart = Cart::where('user_id', auth()->id())->first();
+            
+            if (!$cart) {
+                return redirect()->back()->with("error", "سەبەتەکەت بەتاڵە!");
             }
 
-            $this->updateProductQuantities($request->items);
+            $cartItems = \App\Models\CartItem::with(['product', 'size'])
+                ->where('cart_id', $cart->id)
+                ->get();
 
-            $this->clearUserCart($request->user()->id);
+            if ($cartItems->isEmpty()) {
+                return redirect()->back()->with("error", "سەبەتەکەت بەتاڵە!");
+            }
+
+            // Calculate total price
+            $totalPrice = $cartItems->sum(function ($item) {
+                return $item->product->final_price * $item->quantity;
+            });
+
+            // Create order
+            $order = Order::create([
+                'user_id' => auth()->id(),
+                'total_price' => $totalPrice,
+            ]);
+
+            // Create order items and update stock
+            foreach ($cartItems as $item) {
+                // Check stock
+                $productsize = ProductSize::where("product_id", $item->product_id)
+                    ->where("size_id", $item->size_id)
+                    ->first();
+
+                if (!$productsize || $productsize->quantity < $item->quantity) {
+                    throw new \Exception("بەداخەوە، کۆگا بەس نییە بۆ {$item->product->name}!");
+                }
+
+                // Create order item
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $item->product_id,
+                    'size_id' => $item->size_id,
+                    'quantity' => $item->quantity,
+                    'price' => $item->product->final_price * $item->quantity,
+                ]);
+
+                // Update stock
+                $productsize->quantity -= $item->quantity;
+                $productsize->save();
+            }
+
+            // Clear cart
+            \App\Models\CartItem::where('cart_id', $cart->id)->delete();
+            $cart->delete();
 
             DB::commit();
 
-            return redirect()->route('home')->with("success", "Order placed successfully!");
+            return redirect()->route('orders.index')->with("success", "داواکارییەکەت بەسەرکەوتوویی تۆمارکرا!");
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with("error", $e->getMessage());

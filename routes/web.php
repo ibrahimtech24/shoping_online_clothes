@@ -84,6 +84,8 @@ Route::middleware("auth")->group(function () {
 
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 
+    // Settings
+    Route::get('/settings', [PageController::class, 'settings'])->name('settings.index');
 
     // Session
     Route::post('/logout', [SessionController::class, 'destroy'])->name('logout');

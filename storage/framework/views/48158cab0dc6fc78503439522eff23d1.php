@@ -17,53 +17,122 @@
             <div class="absolute -bottom-96 -right-96 w-96 h-96 bg-gradient-to-br from-pink-500/20 to-purple-600/20 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-br from-yellow-400/10 to-orange-500/10 rounded-full blur-3xl"></div>
         </div>
-                
-        <header class="sticky top-0 z-40 bg-slate-900/80 backdrop-blur-xl border-b border-white/10">
-            <div class="max-w-7xl mx-auto px-4 py-4">
-                <div class="flex items-center justify-between">
-                    
-                    <div>
-                        <h1 class="text-xl md:text-2xl font-bold text-white">
-                            <?php echo e(app()->getLocale() == 'ku' ? 'دۆزینەوە' : (app()->getLocale() == 'ar' ? 'اكتشف' : 'Discover')); ?>
 
-                        </h1>
-                        <p class="text-xs text-white/60"><?php echo e($products->total()); ?> <?php echo e(app()->getLocale() == 'ku' ? 'بەرهەم' : (app()->getLocale() == 'ar' ? 'منتج' : 'items')); ?></p>
+        <main class="max-w-7xl mx-auto px-4 pt-4 pb-6" x-data="{ showFilter: false }">
+            
+            <section class="mb-4">
+                <form action="<?php echo e(route('products.index')); ?>" method="GET" id="filterForm">
+                    <div class="relative flex gap-2">
+                        <div class="relative flex-1">
+                            <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-white/50"></i>
+                            <input type="text" 
+                                   name="search"
+                                   value="<?php echo e(request('search')); ?>"
+                                   placeholder="<?php echo e(app()->getLocale() == 'ku' ? 'گەڕان بۆ بەرهەم...' : (app()->getLocale() == 'ar' ? 'ابحث عن منتج...' : 'Search products...')); ?>"
+                                   class="w-full pl-12 pr-4 py-3 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-500/10 outline-none transition-all text-white placeholder:text-white/50 text-sm">
+                        </div>
+                        
+                        <button type="button" 
+                                @click="showFilter = !showFilter"
+                                class="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 transition-all hover:scale-105"
+                                :class="{ 'ring-2 ring-cyan-400': showFilter }">
+                            <i class="fa-solid fa-sliders text-white"></i>
+                        </button>
                     </div>
                     
                     
-                    <div class="flex items-center gap-3">
-                        <button class="w-10 h-10 bg-white/10 rounded-2xl flex items-center justify-center hover:bg-white/20 transition-colors">
-                            <i class="fa-solid fa-bell text-white"></i>
-                        </button>
-                        <button class="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-cyan-500/30">
-                            <i class="fa-solid fa-bag-shopping text-white text-sm"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </header>
+                    <?php if(request('category')): ?>
+                        <input type="hidden" name="category" value="<?php echo e(request('category')); ?>">
+                    <?php endif; ?>
+                    
+                    
+                    <div x-show="showFilter" 
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="opacity-0 -translate-y-2"
+                         x-transition:enter-end="opacity-100 translate-y-0"
+                         x-transition:leave="transition ease-in duration-150"
+                         x-transition:leave-start="opacity-100 translate-y-0"
+                         x-transition:leave-end="opacity-0 -translate-y-2"
+                         class="mt-3 p-4 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20">
+                        
+                        
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-white font-semibold flex items-center gap-2">
+                                <i class="fa-solid fa-filter text-cyan-400"></i>
+                                <?php echo e(app()->getLocale() == 'ku' ? 'فلتەرکردن' : (app()->getLocale() == 'ar' ? 'تصفية' : 'Filter')); ?>
 
-        <main class="max-w-7xl mx-auto px-4 py-6">
-            
-            
-            <section class="mb-6">
-                <form action="<?php echo e(route('products.index')); ?>" method="GET">
-                    <div class="relative">
-                        <i class="fa-solid fa-magnifying-glass absolute left-5 top-1/2 -translate-y-1/2 text-white/50"></i>
-                        <input type="text" 
-                               name="search"
-                               value="<?php echo e(request('search')); ?>"
-                               placeholder="<?php echo e(app()->getLocale() == 'ku' ? 'گەڕان بۆ بەرهەم...' : (app()->getLocale() == 'ar' ? 'ابحث عن منتج...' : 'Search products...')); ?>"
-                               class="w-full pl-14 pr-14 py-4 bg-white/10 backdrop-blur-xl rounded-3xl border border-white/20 focus:border-cyan-400/50 focus:ring-4 focus:ring-cyan-500/10 outline-none transition-all text-white placeholder:text-white/50">
-                        <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 transition-shadow">
-                            <i class="fa-solid fa-sliders text-white text-sm"></i>
-                        </button>
+                            </h3>
+                            <a href="<?php echo e(route('products.index')); ?>" class="text-xs text-cyan-400 hover:text-cyan-300">
+                                <?php echo e(app()->getLocale() == 'ku' ? 'پاککردنەوە' : (app()->getLocale() == 'ar' ? 'مسح الكل' : 'Clear All')); ?>
+
+                            </a>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            
+                            <div>
+                                <label class="text-white/70 text-xs mb-2 block">
+                                    <?php echo e(app()->getLocale() == 'ku' ? 'نرخ' : (app()->getLocale() == 'ar' ? 'السعر' : 'Price')); ?>
+
+                                </label>
+                                <div class="flex gap-2">
+                                    <input type="number" 
+                                           name="min_price" 
+                                           value="<?php echo e(request('min_price')); ?>"
+                                           placeholder="<?php echo e(app()->getLocale() == 'ku' ? 'لە' : (app()->getLocale() == 'ar' ? 'من' : 'Min')); ?>"
+                                           class="w-full px-3 py-2 bg-white/10 rounded-xl border border-white/10 text-white text-sm placeholder:text-white/40 outline-none focus:border-cyan-400/50">
+                                    <input type="number" 
+                                           name="max_price" 
+                                           value="<?php echo e(request('max_price')); ?>"
+                                           placeholder="<?php echo e(app()->getLocale() == 'ku' ? 'بۆ' : (app()->getLocale() == 'ar' ? 'إلى' : 'Max')); ?>"
+                                           class="w-full px-3 py-2 bg-white/10 rounded-xl border border-white/10 text-white text-sm placeholder:text-white/40 outline-none focus:border-cyan-400/50">
+                                </div>
+                            </div>
+                            
+                            
+                            <div>
+                                <label class="text-white/70 text-xs mb-2 block">
+                                    <?php echo e(app()->getLocale() == 'ku' ? 'ڕیزکردن' : (app()->getLocale() == 'ar' ? 'ترتيب' : 'Sort By')); ?>
+
+                                </label>
+                                <select name="sort" class="w-full px-3 py-2 bg-white/10 rounded-xl border border-white/10 text-white text-sm outline-none focus:border-cyan-400/50 cursor-pointer">
+                                    <option value="latest" <?php echo e(request('sort') == 'latest' ? 'selected' : ''); ?> class="bg-slate-800"><?php echo e(app()->getLocale() == 'ku' ? 'نوێترین' : (app()->getLocale() == 'ar' ? 'الأحدث' : 'Latest')); ?></option>
+                                    <option value="oldest" <?php echo e(request('sort') == 'oldest' ? 'selected' : ''); ?> class="bg-slate-800"><?php echo e(app()->getLocale() == 'ku' ? 'کۆنترین' : (app()->getLocale() == 'ar' ? 'الأقدم' : 'Oldest')); ?></option>
+                                    <option value="price_low" <?php echo e(request('sort') == 'price_low' ? 'selected' : ''); ?> class="bg-slate-800"><?php echo e(app()->getLocale() == 'ku' ? 'نرخ: کەمەوە' : (app()->getLocale() == 'ar' ? 'السعر: الأقل' : 'Price: Low to High')); ?></option>
+                                    <option value="price_high" <?php echo e(request('sort') == 'price_high' ? 'selected' : ''); ?> class="bg-slate-800"><?php echo e(app()->getLocale() == 'ku' ? 'نرخ: زۆرەوە' : (app()->getLocale() == 'ar' ? 'السعر: الأعلى' : 'Price: High to Low')); ?></option>
+                                    <option value="name_asc" <?php echo e(request('sort') == 'name_asc' ? 'selected' : ''); ?> class="bg-slate-800"><?php echo e(app()->getLocale() == 'ku' ? 'ناو: A-Z' : (app()->getLocale() == 'ar' ? 'الاسم: أ-ي' : 'Name: A-Z')); ?></option>
+                                    <option value="name_desc" <?php echo e(request('sort') == 'name_desc' ? 'selected' : ''); ?> class="bg-slate-800"><?php echo e(app()->getLocale() == 'ku' ? 'ناو: Z-A' : (app()->getLocale() == 'ar' ? 'الاسم: ي-أ' : 'Name: Z-A')); ?></option>
+                                </select>
+                            </div>
+                            
+                            
+                            <div>
+                                <label class="text-white/70 text-xs mb-2 block">
+                                    <?php echo e(app()->getLocale() == 'ku' ? 'بەردەستی' : (app()->getLocale() == 'ar' ? 'التوفر' : 'Availability')); ?>
+
+                                </label>
+                                <select name="stock" class="w-full px-3 py-2 bg-white/10 rounded-xl border border-white/10 text-white text-sm outline-none focus:border-cyan-400/50 cursor-pointer">
+                                    <option value="" class="bg-slate-800"><?php echo e(app()->getLocale() == 'ku' ? 'هەموو' : (app()->getLocale() == 'ar' ? 'الكل' : 'All')); ?></option>
+                                    <option value="in_stock" <?php echo e(request('stock') == 'in_stock' ? 'selected' : ''); ?> class="bg-slate-800"><?php echo e(app()->getLocale() == 'ku' ? 'بەردەستە' : (app()->getLocale() == 'ar' ? 'متوفر' : 'In Stock')); ?></option>
+                                    <option value="out_of_stock" <?php echo e(request('stock') == 'out_of_stock' ? 'selected' : ''); ?> class="bg-slate-800"><?php echo e(app()->getLocale() == 'ku' ? 'نییە' : (app()->getLocale() == 'ar' ? 'غير متوفر' : 'Out of Stock')); ?></option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="mt-4 flex justify-end">
+                            <button type="submit" class="px-6 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-xl font-medium text-sm hover:shadow-lg hover:shadow-cyan-500/30 transition-all flex items-center gap-2">
+                                <i class="fa-solid fa-check"></i>
+                                <?php echo e(app()->getLocale() == 'ku' ? 'جێبەجێکردن' : (app()->getLocale() == 'ar' ? 'تطبيق' : 'Apply')); ?>
+
+                            </button>
+                        </div>
                     </div>
                 </form>
             </section>
 
             
-            <section class="mb-8">
+            <section class="mb-4">
                 <div class="flex gap-3 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4">
                     
                     <a href="<?php echo e(route('products.index')); ?>" 

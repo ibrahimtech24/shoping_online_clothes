@@ -64,14 +64,20 @@ class CartController extends Controller
             'all_request' => $request->all()
         ]);
 
-        // Check if product size has enough stock
+        // Check if product size has enough stock - sum all quantities for same product+size
         $productSize = ProductSize::where('product_id', $request->product_id)
             ->where('size_id', $request->size)
             ->first();
+            
+        // Get total stock for this product + size combination (all colors)
+        $totalStockForSize = ProductSize::where('product_id', $request->product_id)
+            ->where('size_id', $request->size)
+            ->sum('quantity');
 
         \Log::info('ProductSize Query Result', [
             'found' => $productSize ? 'yes' : 'no',
-            'quantity' => $productSize ? $productSize->quantity : 'N/A',
+            'single_quantity' => $productSize ? $productSize->quantity : 'N/A',
+            'total_stock_for_size' => $totalStockForSize,
             'requested' => $request->quantity
         ]);
 
@@ -83,8 +89,8 @@ class CartController extends Controller
             return redirect()->back()->with("error", "بەداخەوە، ئەم قەبارەیە بەردەست نییە!");
         }
 
-        if ($productSize->quantity < $request->quantity) {
-            return redirect()->back()->with("error", "بەداخەوە، ئەم بڕە لە کۆگادا نەماوە!");
+        if ($totalStockForSize < $request->quantity) {
+            return redirect()->back()->with("error", "بەداخەوە، تەنها {$totalStockForSize} دانە لە کۆگادا هەیە!");
         }
 
         $cart = $this->createCart();
@@ -96,8 +102,8 @@ class CartController extends Controller
 
         $totalQuantity = $request->quantity + ($cartItem ? $cartItem->quantity : 0);
         
-        if ($totalQuantity > $productSize->quantity) {
-            return redirect()->back()->with("error", "بەداخەوە، تەنها {$productSize->quantity} دانە لە کۆگادا هەیە!");
+        if ($totalQuantity > $totalStockForSize) {
+            return redirect()->back()->with("error", "بەداخەوە، تەنها {$totalStockForSize} دانە لە کۆگادا هەیە!");
         }
 
         if (empty($cartItem)) {

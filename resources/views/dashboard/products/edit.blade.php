@@ -100,44 +100,75 @@
     <hr class="my-4">
 
     <x-structure heading="productsize" model="productsizes" :param="['product' => $product]">
-        <thead class="bg-gray-50 border-b-2 border-gray-200">
+        <thead class="bg-gradient-to-r from-purple-600 to-purple-700 text-white">
             <tr>
-                <th class="w-40 p-3 text-sm font-semibold tracking-wide text-center">Product Name</th>
-                <th class="w-40 p-3 text-sm font-semibold tracking-wide text-center">Size</th>
-                <th class="w-20 p-3 text-sm font-semibold tracking-wide text-center">Quantity</th>
-                <th class="p-3 text-sm font-semibold tracking-wide text-center">Created Date</th>
-                <th class="w-24 p-3 text-sm font-semibold tracking-wide text-center">Updated Date</th>
-                <th class="w-24 p-3 text-sm font-semibold tracking-wide text-center">Action</th>
+                <th class="w-40 p-3 text-sm font-semibold tracking-wide text-center">
+                    @if(app()->getLocale() == 'ku') ناوی بەرهەم @elseif(app()->getLocale() == 'ar') اسم المنتج @else Product Name @endif
+                </th>
+                <th class="w-24 p-3 text-sm font-semibold tracking-wide text-center">
+                    @if(app()->getLocale() == 'ku') قەبارە @elseif(app()->getLocale() == 'ar') المقاس @else Size @endif
+                </th>
+                <th class="w-28 p-3 text-sm font-semibold tracking-wide text-center">
+                    @if(app()->getLocale() == 'ku') رەنگ @elseif(app()->getLocale() == 'ar') اللون @else Color @endif
+                </th>
+                <th class="w-20 p-3 text-sm font-semibold tracking-wide text-center">
+                    @if(app()->getLocale() == 'ku') بڕ @elseif(app()->getLocale() == 'ar') الكمية @else Qty @endif
+                </th>
+                <th class="p-3 text-sm font-semibold tracking-wide text-center">
+                    @if(app()->getLocale() == 'ku') بەروار @elseif(app()->getLocale() == 'ar') التاريخ @else Date @endif
+                </th>
+                <th class="w-24 p-3 text-sm font-semibold tracking-wide text-center">
+                    @if(app()->getLocale() == 'ku') کردار @elseif(app()->getLocale() == 'ar') الإجراءات @else Action @endif
+                </th>
             </tr>
         </thead>
         <tbody class="divide-y divide-gray-100">
             @foreach ($productsizes as $productsize)
-                <tr class="bg-white">
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap  text-center">
-                        {{ $productsize->product->name }}
+                <tr class="bg-white hover:bg-gray-50 transition-colors">
+                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-center">
+                        <span class="font-medium">{{ Str::limit($productsize->product->name, 20) }}</span>
+                    </td>
+                    <td class="p-3 text-sm text-center">
+                        <span class="inline-flex items-center justify-center px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg font-bold">
+                            {{ $productsize->size->name }}
+                        </span>
+                    </td>
+                    <td class="p-3 text-sm text-center">
+                        @if($productsize->color)
+                            <div class="flex items-center justify-center gap-2">
+                                <span class="w-6 h-6 rounded-full border-2 border-gray-300 shadow-sm" 
+                                      style="background-color: {{ $productsize->color_code }};"
+                                      title="{{ $productsize->color }}"></span>
+                                <span class="text-gray-600 text-xs">{{ $productsize->color }}</span>
+                            </div>
+                        @else
+                            <span class="text-gray-400 text-xs">—</span>
+                        @endif
+                    </td>
+                    <td class="p-3 text-sm text-center">
+                        <span class="inline-flex items-center justify-center px-3 py-1.5 rounded-lg font-bold
+                            {{ $productsize->quantity == 0 ? 'bg-red-100 text-red-700' : ($productsize->quantity <= 5 ? 'bg-orange-100 text-orange-700' : 'bg-green-100 text-green-700') }}">
+                            {{ $productsize->quantity }}
+                        </span>
+                    </td>
+                    <td class="p-3 text-sm text-gray-500 whitespace-nowrap text-center">
+                        {{ $productsize->updated_at->format('Y-m-d') }}
                     </td>
                     <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-center">
-                        {{ $productsize->size->name }}
-                    </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-center">
-                        {{ $productsize->quantity }}
-                    </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-center">
-                        {{ $productsize->created_at->format('Y-m-d H:i:s') }}</td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-center">
-                        {{ $productsize->updated_at->format('Y-m-d H:i:s') }}</td>
-                    <td
-                        class="flex justify-center items-center space-x-2 p-3 text-sm text-gray-700 whitespace-nowrap text-center">
-                        <a href="{{ route('dashboard.productsizes.edit', ['productsize' => $productsize]) }}"><i
-                                class="fa-solid fa-pen-to-square fa-lg"></i></a>
+                        <div class="flex justify-center items-center gap-2">
+                            <a href="{{ route('dashboard.productsizes.edit', ['productsize' => $productsize]) }}" 
+                               class="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-100 transition-colors">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </a>
 
-                        <form action="{{ route('dashboard.productsizes.delete', ['productsize' => $productsize]) }}"
-                            method="POST">
-                            @csrf
-                            @method('DELETE')
-
-                            <button class="text-red-600"><i class="fa-solid fa-trash-can fa-lg"></i></button>
-                        </form>
+                            <form action="{{ route('dashboard.productsizes.delete', ['productsize' => $productsize]) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button class="w-8 h-8 bg-red-50 text-red-600 rounded-lg flex items-center justify-center hover:bg-red-100 transition-colors">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
             @endforeach

@@ -13,6 +13,27 @@ use Illuminate\Validation\ValidationException;
 
 class AdminProductController extends Controller
 {
+    // Available colors for selection
+    private function getAvailableColors()
+    {
+        return [
+            ['name' => 'ڕەش', 'code' => '#000000'],
+            ['name' => 'سپی', 'code' => '#FFFFFF'],
+            ['name' => 'شین', 'code' => '#3B82F6'],
+            ['name' => 'سوور', 'code' => '#EF4444'],
+            ['name' => 'سەوز', 'code' => '#22C55E'],
+            ['name' => 'زەرد', 'code' => '#EAB308'],
+            ['name' => 'پەمەیی', 'code' => '#EC4899'],
+            ['name' => 'مۆر', 'code' => '#A855F7'],
+            ['name' => 'قاوەیی', 'code' => '#A16207'],
+            ['name' => 'خۆڵەمێشی', 'code' => '#6B7280'],
+            ['name' => 'نەیلی', 'code' => '#1E3A5F'],
+            ['name' => 'بێژ', 'code' => '#D4A574'],
+            ['name' => 'نارنجی', 'code' => '#F97316'],
+            ['name' => 'فیرۆزەیی', 'code' => '#06B6D4'],
+        ];
+    }
+
     public function index()
     {
         return view("dashboard.products.index", [
@@ -30,6 +51,7 @@ class AdminProductController extends Controller
             'categories' => $categories,
             'subcategories' => $subcategories,
             'sizes' => $sizes,
+            'colors' => $this->getAvailableColors(),
         ]);
     }
 
@@ -81,13 +103,43 @@ class AdminProductController extends Controller
     {
         $sizes = request()->sizes;
         $quantities = request()->quantities;
+        $productColors = request()->product_colors ?? [];
 
-        foreach ($sizes as $size => $value) {
-            ProductSize::create([
-                "product_id" => $product->id,
-                "size_id" => $value,
-                "quantity" => $quantities[$size],
-            ]);
+        // If colors are selected, create entries for each size-color combination
+        if (!empty($productColors)) {
+            foreach ($sizes as $size => $sizeId) {
+                foreach ($productColors as $colorData) {
+                    $colorName = null;
+                    $colorCode = null;
+                    
+                    if ($colorData && strpos($colorData, '|') !== false) {
+                        list($colorName, $colorCode) = explode('|', $colorData);
+                    }
+
+                    // Calculate quantity per color (divide evenly)
+                    $totalQuantity = $quantities[$size] ?? 0;
+                    $quantityPerColor = floor($totalQuantity / count($productColors));
+
+                    ProductSize::create([
+                        "product_id" => $product->id,
+                        "size_id" => $sizeId,
+                        "quantity" => $quantityPerColor,
+                        "color" => $colorName,
+                        "color_code" => $colorCode,
+                    ]);
+                }
+            }
+        } else {
+            // No colors selected, create entries without color
+            foreach ($sizes as $size => $sizeId) {
+                ProductSize::create([
+                    "product_id" => $product->id,
+                    "size_id" => $sizeId,
+                    "quantity" => $quantities[$size] ?? 0,
+                    "color" => null,
+                    "color_code" => null,
+                ]);
+            }
         }
     }
 

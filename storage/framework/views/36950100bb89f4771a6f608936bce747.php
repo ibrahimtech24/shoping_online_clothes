@@ -68,11 +68,23 @@ unset($__defined_vars, $__key, $__value); ?>
     
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
     <?php echo app('Illuminate\Foundation\Vite')('resources/css/app.css'); ?>
     
     <style>
         [x-cloak] { display: none !important; }
-        body { direction: <?php echo e(in_array(app()->getLocale(), ['ku', 'ar']) ? 'rtl' : 'ltr'); ?>; }
+        body { 
+            direction: <?php echo e(in_array(app()->getLocale(), ['ku', 'ar']) ? 'rtl' : 'ltr'); ?>;
+            font-family: 'Noto Sans Arabic', 'Poppins', sans-serif;
+        }
+        
+        * {
+            font-family: 'Noto Sans Arabic', 'Poppins', sans-serif;
+        }
         
         /* Smooth animations */
         @keyframes fadeInUp {
@@ -165,6 +177,29 @@ unset($__defined_vars, $__key, $__value); ?>
             100% { transform: translateX(50%); }
         }
         [dir="rtl"] .animate-scroll { animation: scroll-rtl 25s linear infinite; }
+        
+        /* Glass Effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-strong {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        /* Text Gradient */
+        .text-gradient-cyan {
+            background: linear-gradient(135deg, #06b6d4, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
     </style>
     
     
@@ -205,348 +240,387 @@ unset($__defined_vars, $__key, $__value); ?>
     </script>
 </head>
 
-<body class="flex flex-col min-h-screen bg-dark-50 text-dark-900 antialiased">
+<body class="flex flex-col min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-black text-white antialiased">
     
-    <nav x-data="{ open: false, scrolled: false, searchOpen: false }" 
-         @scroll.window="scrolled = (window.pageYOffset > 20)"
-         :class="scrolled ? 'bg-white/95 backdrop-blur-xl shadow-lg shadow-dark-900/10' : 'bg-white/80 backdrop-blur-md'"
-         class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
-        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-14 sm:h-16 lg:h-20">
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div class="absolute -top-96 <?php echo e(in_array(app()->getLocale(), ['ku', 'ar']) ? '-left-96' : '-right-96'); ?> w-[600px] h-[600px] bg-gradient-to-br from-cyan-500/20 to-blue-600/10 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute top-1/3 <?php echo e(in_array(app()->getLocale(), ['ku', 'ar']) ? '-right-96' : '-left-96'); ?> w-[500px] h-[500px] bg-gradient-to-br from-purple-500/20 to-pink-600/10 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+        <div class="absolute -bottom-96 <?php echo e(in_array(app()->getLocale(), ['ku', 'ar']) ? 'left-1/4' : 'right-1/4'); ?> w-[400px] h-[400px] bg-gradient-to-br from-pink-500/15 to-purple-600/10 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
+    </div>
+
+    <?php
+        $locale = app()->getLocale();
+        $isRtl = in_array($locale, ['ku', 'ar']);
+    ?>
+
+    
+    <nav class="fixed top-0 left-0 right-0 z-50 px-4 py-4" x-data="{ open: false, scrolled: false, userMenu: false }" @scroll.window="scrolled = (window.scrollY > 50)" @click.away="userMenu = false">
+        <div :class="scrolled ? 'glass-strong shadow-2xl shadow-cyan-500/10 py-3' : 'bg-transparent py-4'" 
+             class="max-w-7xl mx-auto rounded-2xl transition-all duration-500 px-6">
+            <div class="flex items-center justify-between">
                 
-                <div class="flex items-center gap-2 sm:gap-4 flex-1">
-                    
-                    <a href="<?php echo e(route('home')); ?>" class="flex items-center gap-2 sm:gap-3 group">
-                        
-                        <div class="relative">
-                            <div class="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg shadow-purple-500/30 group-hover:shadow-purple-500/50 group-hover:scale-105 transition-all duration-300 rotate-2 group-hover:rotate-0">
-                                <svg class="w-4 h-4 sm:w-5 sm:h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
-                                </svg>
-                            </div>
-                            
-                            <div class="absolute -top-0.5 -right-0.5 w-2 h-2 sm:w-3 sm:h-3 bg-yellow-400 rounded-full animate-pulse shadow-lg shadow-yellow-400/50"></div>
+                <a href="<?php echo e(route('home')); ?>" class="flex items-center gap-3 group">
+                    <div class="relative">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/30 group-hover:shadow-cyan-500/50 transition-all transform group-hover:scale-110 group-hover:rotate-6">
+                            <i class="fa-solid fa-crown text-white text-xl sm:text-2xl"></i>
                         </div>
-                        
-                        
-                        <div class="flex flex-col">
-                            <span class="text-lg sm:text-xl lg:text-2xl font-black tracking-tight">
-                                <span class="bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 bg-clip-text text-transparent">کورد</span>
-                                <span class="text-gray-800">مارکە</span>
-                            </span>
-                            <span class="text-[8px] sm:text-[10px] lg:text-xs text-gray-400 font-medium -mt-0.5 tracking-wide hidden sm:block">KURD MARKET</span>
-                        </div>
-                    </a>
-                    
-                    
-                    <div class="flex-1 max-w-md mx-2 lg:hidden">
-                        <div class="relative">
-                            <input type="text" 
-                                   placeholder="<?php echo e(app()->getLocale() == 'ku' ? 'گەڕان...' : (app()->getLocale() == 'ar' ? 'بحث...' : 'Search...')); ?>"
-                                   class="w-full h-8 sm:h-9 px-3 sm:px-4 <?php echo e(in_array(app()->getLocale(), ['ku', 'ar']) ? 'pr-10 pl-3' : 'pl-10 pr-3'); ?> bg-gray-100 border-0 rounded-full text-sm placeholder-gray-400 focus:ring-2 focus:ring-purple-300 focus:bg-white transition-all">
-                            <div class="absolute <?php echo e(in_array(app()->getLocale(), ['ku', 'ar']) ? 'right-3' : 'left-3'); ?> top-1/2 -translate-y-1/2">
-                                <i class="fa-solid fa-search text-gray-400 text-xs"></i>
-                            </div>
-                        </div>
+                        <div class="absolute -bottom-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-gradient-to-br from-pink-500 to-purple-500 rounded-lg animate-bounce-soft"></div>
                     </div>
-                    
-                    
-                    <div class="hidden lg:block h-8 w-px bg-gray-200"></div>
-                    <div x-data="{ langOpen: false }" class="relative hidden lg:block">
-                        <button @click="langOpen = !langOpen" 
-                                class="flex items-center gap-2 px-3 lg:px-4 py-2 rounded-xl bg-gradient-to-r from-purple-50 to-pink-50 hover:from-purple-100 hover:to-pink-100 border border-purple-200/50 transition-all duration-300 shadow-sm">
-                            <i class="fa-solid fa-globe text-purple-500 text-sm"></i>
-                            <span class="text-sm font-bold text-purple-700">
-                                <?php if(app()->getLocale() == 'ku'): ?>
-                                    کوردی
-                                <?php elseif(app()->getLocale() == 'ar'): ?>
-                                    العربية
-                                <?php else: ?>
-                                    English
-                                <?php endif; ?>
-                            </span>
-                            <svg class="w-3 h-3 text-purple-500 transition-transform duration-300" :class="langOpen && 'rotate-180'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                            </svg>
-                        </button>
-                        
-                        <div x-show="langOpen" 
-                             @click.away="langOpen = false"
-                             x-transition:enter="transition ease-out duration-200"
-                             x-transition:enter-start="opacity-0 scale-95"
-                             x-transition:enter-end="opacity-100 scale-100"
-                             x-transition:leave="transition ease-in duration-150"
-                             x-transition:leave-start="opacity-100 scale-100"
-                             x-transition:leave-end="opacity-0 scale-95"
-                             x-cloak
-                             class="absolute <?php echo e(in_array(app()->getLocale(), ['ku', 'ar']) ? 'right-0' : 'left-0'); ?> mt-2 w-36 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50">
-                            <a href="<?php echo e(route('language.switch', 'ku')); ?>" 
-                               class="flex items-center justify-between px-4 py-3 hover:bg-purple-50 transition-all <?php echo e(app()->getLocale() == 'ku' ? 'bg-purple-50 text-purple-700 font-bold' : 'text-gray-700'); ?>">
-                                <span class="text-sm">کوردی</span>
-                                <?php if(app()->getLocale() == 'ku'): ?>
-                                    <i class="fa-solid fa-check text-purple-600 text-xs"></i>
-                                <?php endif; ?>
-                            </a>
-                            <a href="<?php echo e(route('language.switch', 'ar')); ?>" 
-                               class="flex items-center justify-between px-4 py-3 hover:bg-purple-50 transition-all <?php echo e(app()->getLocale() == 'ar' ? 'bg-purple-50 text-purple-700 font-bold' : 'text-gray-700'); ?>">
-                                <span class="text-sm">العربية</span>
-                                <?php if(app()->getLocale() == 'ar'): ?>
-                                    <i class="fa-solid fa-check text-purple-600 text-xs"></i>
-                                <?php endif; ?>
-                            </a>
-                            <a href="<?php echo e(route('language.switch', 'en')); ?>" 
-                               class="flex items-center justify-between px-4 py-3 hover:bg-purple-50 transition-all <?php echo e(app()->getLocale() == 'en' ? 'bg-purple-50 text-purple-700 font-bold' : 'text-gray-700'); ?>">
-                                <span class="text-sm">English</span>
-                                <?php if(app()->getLocale() == 'en'): ?>
-                                    <i class="fa-solid fa-check text-purple-600 text-xs"></i>
-                                <?php endif; ?>
-                            </a>
-                        </div>
+                    <div class="hidden sm:block">
+                        <span class="text-xl sm:text-2xl font-black text-white">Luxe<span class="text-gradient-cyan">Shop</span></span>
+                        <p class="text-xs text-white/50 -mt-1">Premium Fashion Store</p>
                     </div>
-                </div>
+                </a>
 
                 
-                <ul class="hidden lg:flex items-center gap-1">
+                <div class="hidden lg:flex items-center gap-2">
                     <?php
-                        $navItems = [
-                            ['route' => 'home', 'label' => __('messages.home'), 'icon' => 'fa-home'],
-                            ['route' => 'products.index', 'label' => __('messages.shop'), 'icon' => 'fa-bag-shopping'],
-                            ['route' => 'cart.index', 'label' => __('messages.cart'), 'icon' => 'fa-cart-shopping'],
-                            ['route' => 'orders.index', 'label' => __('messages.orders'), 'icon' => 'fa-box'],
+                        $menuItems = [
+                            ['route' => 'home', 'icon' => 'fa-house', 'label' => $locale == 'ku' ? 'ماڵەوە' : ($locale == 'ar' ? 'الرئيسية' : 'Home')],
+                            ['route' => 'products.index', 'icon' => 'fa-bag-shopping', 'label' => $locale == 'ku' ? 'بەرهەمەکان' : ($locale == 'ar' ? 'المنتجات' : 'Shop')],
+                            ['route' => 'categories.index', 'icon' => 'fa-tags', 'label' => $locale == 'ku' ? 'کەتەگۆری' : ($locale == 'ar' ? 'الفئات' : 'Categories')],
+                            ['route' => 'cart.index', 'icon' => 'fa-cart-shopping', 'label' => $locale == 'ku' ? 'سەبەتە' : ($locale == 'ar' ? 'السلة' : 'Cart')],
+                            ['route' => 'orders.index', 'icon' => 'fa-box', 'label' => $locale == 'ku' ? 'داواکاریەکان' : ($locale == 'ar' ? 'الطلبات' : 'Orders')],
                         ];
                     ?>
-                    
-                    <?php $__currentLoopData = $navItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <li>
-                            <a href="<?php echo e(route($item['route'])); ?>"
-                               class="relative px-4 py-2 rounded-xl font-medium transition-all duration-300 flex items-center gap-2
-                               <?php echo e(request()->routeIs($item['route']) 
-                                  ? 'text-primary-600 bg-primary-50' 
-                                  : 'text-dark-600 hover:text-primary-600 hover:bg-primary-50/50'); ?>">
-                                <i class="fa-solid <?php echo e($item['icon']); ?> text-sm"></i>
+                    <?php $__currentLoopData = $menuItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <a href="<?php echo e(route($item['route'])); ?>" 
+                           class="relative px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 group
+                                  <?php echo e(request()->routeIs($item['route']) ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/30' : 'text-white/70 hover:text-white glass hover:shadow-lg hover:shadow-cyan-500/10'); ?>">
+                            <span class="relative flex items-center gap-2">
+                                <i class="fa-solid <?php echo e($item['icon']); ?>"></i>
                                 <?php echo e($item['label']); ?>
 
-                            </a>
-                        </li>
+                            </span>
+                        </a>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     
                     <?php if(auth()->guard()->check()): ?>
                         <?php if (\Illuminate\Support\Facades\Blade::check('admin')): ?>
-                            <li>
-                                <a href="<?php echo e(route('dashboard')); ?>"
-                                   class="px-4 py-2 rounded-xl font-medium transition-all flex items-center gap-2
-                                   <?php echo e(request()->routeIs('dashboard') ? 'text-primary-600 bg-primary-50' : 'text-dark-600 hover:text-primary-600 hover:bg-primary-50/50'); ?>">
-                                    <i class="fa-solid fa-gauge-high text-sm"></i>
-                                    <?php echo e(__('messages.dashboard')); ?>
+                            <a href="<?php echo e(route('dashboard')); ?>" 
+                               class="relative px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300
+                                      <?php echo e(request()->routeIs('dashboard') ? 'bg-gradient-to-r from-purple-500 to-pink-600 text-white shadow-lg shadow-purple-500/30' : 'text-white/70 hover:text-white glass hover:shadow-lg hover:shadow-purple-500/10'); ?>">
+                                <span class="flex items-center gap-2">
+                                    <i class="fa-solid fa-gauge-high"></i>
+                                    <?php echo e($locale == 'ku' ? 'داشبۆرد' : ($locale == 'ar' ? 'لوحة التحكم' : 'Dashboard')); ?>
 
-                                </a>
-                            </li>
+                                </span>
+                            </a>
                         <?php endif; ?>
-                    <?php endif; ?>
-                </ul>
-
-                
-                <div class="hidden lg:flex items-center gap-3">
-                    <?php if(auth()->guard()->check()): ?>
-                        <span class="text-sm text-dark-500"><?php echo e(__('messages.hello')); ?>، <?php echo e(auth()->user()->name); ?></span>
-                        <form action="<?php echo e(route('logout')); ?>" method="POST">
-                            <?php echo csrf_field(); ?>
-                            <button type="submit" class="btn-primary text-white px-5 py-2.5 rounded-xl font-medium flex items-center gap-2 text-sm">
-                                <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                                <?php echo e(__('messages.logout')); ?>
-
-                            </button>
-                        </form>
-                    <?php else: ?>
-                        <a href="<?php echo e(route('login')); ?>" class="px-5 py-2.5 rounded-xl font-medium text-dark-700 hover:text-primary-600 hover:bg-primary-50/50 transition-all text-sm">
-                            <?php echo e(__('messages.login')); ?>
-
-                        </a>
-                        <a href="<?php echo e(route('register')); ?>" class="btn-primary text-white px-5 py-2.5 rounded-xl font-medium text-sm">
-                            <?php echo e(__('messages.register')); ?>
-
-                        </a>
                     <?php endif; ?>
                 </div>
 
                 
-                <div class="flex items-center gap-3 lg:hidden">
+                <div class="flex items-center gap-3">
                     
-                    <div x-data="{ open: false }" class="relative sm:hidden">
-                        
-                        <button @click="open = !open" 
-                                class="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/90 backdrop-blur-xl border border-gray-200/80 shadow-md transition-all duration-300"
-                                :class="open && 'ring-2 ring-purple-400/50'">
-                            <i class="fa-solid fa-globe text-purple-500 text-xs"></i>
-                            <span class="text-xs font-bold text-gray-700">
-                                <?php if(app()->getLocale() == 'ku'): ?>
-                                    کوردی
-                                <?php elseif(app()->getLocale() == 'ar'): ?>
-                                    العربية
-                                <?php else: ?>
-                                    English
-                                <?php endif; ?>
-                            </span>
-                            <svg class="w-3 h-3 text-gray-400 transition-transform duration-300" :class="open && 'rotate-180'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                            </svg>
+                    <?php if(auth()->guard()->check()): ?>
+                    <div x-data="{ notifOpen: false }" class="relative hidden sm:block">
+                        <button @click="notifOpen = !notifOpen" class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl glass flex items-center justify-center text-white/70 hover:text-amber-400 hover:shadow-lg hover:shadow-amber-500/10 transition-all relative">
+                            <i class="fa-solid fa-bell text-lg"></i>
+                            <span class="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-red-500 to-orange-500 rounded-full text-white text-xs font-bold flex items-center justify-center shadow-lg animate-pulse">4</span>
                         </button>
                         
                         
-                        <div x-show="open" 
-                             @click.away="open = false"
+                        <div x-show="notifOpen" 
+                             @click.away="notifOpen = false"
+                             x-cloak 
                              x-transition:enter="transition ease-out duration-200"
-                             x-transition:enter-start="opacity-0 scale-95"
-                             x-transition:enter-end="opacity-100 scale-100"
-                             x-transition:leave="transition ease-in duration-150"
-                             x-transition:leave-start="opacity-100 scale-100"
-                             x-transition:leave-end="opacity-0 scale-95"
-                             x-cloak
-                             class="absolute <?php echo e(in_array(app()->getLocale(), ['ku', 'ar']) ? 'left-0' : 'right-0'); ?> mt-2 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50 min-w-[120px]">
+                             x-transition:enter-start="opacity-0 scale-95 -translate-y-2"
+                             x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                             class="absolute <?php echo e($isRtl ? 'left-0' : 'right-0'); ?> mt-3 w-80 rounded-2xl shadow-2xl shadow-black/50 border border-white/20 overflow-hidden z-50"
+                             style="background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);">
                             
-                            <a href="<?php echo e(route('language.switch', 'ku')); ?>" 
-                               class="flex items-center justify-between px-4 py-3 transition-all <?php echo e(app()->getLocale() == 'ku' ? 'bg-purple-50 text-purple-700 font-bold' : 'hover:bg-gray-50 text-gray-700'); ?>">
-                                <span class="text-sm">کوردی</span>
-                                <?php if(app()->getLocale() == 'ku'): ?>
-                                    <i class="fa-solid fa-check text-purple-600 text-xs"></i>
-                                <?php endif; ?>
-                            </a>
                             
-                            <a href="<?php echo e(route('language.switch', 'ar')); ?>" 
-                               class="flex items-center justify-between px-4 py-3 transition-all <?php echo e(app()->getLocale() == 'ar' ? 'bg-purple-50 text-purple-700 font-bold' : 'hover:bg-gray-50 text-gray-700'); ?>">
-                                <span class="text-sm">العربية</span>
-                                <?php if(app()->getLocale() == 'ar'): ?>
-                                    <i class="fa-solid fa-check text-purple-600 text-xs"></i>
-                                <?php endif; ?>
-                            </a>
-                            
-                            <a href="<?php echo e(route('language.switch', 'en')); ?>" 
-                               class="flex items-center justify-between px-4 py-3 transition-all <?php echo e(app()->getLocale() == 'en' ? 'bg-purple-50 text-purple-700 font-bold' : 'hover:bg-gray-50 text-gray-700'); ?>">
-                                <span class="text-sm">English</span>
-                                <?php if(app()->getLocale() == 'en'): ?>
-                                    <i class="fa-solid fa-check text-purple-600 text-xs"></i>
-                                <?php endif; ?>
-                            </a>
-                        </div>
-                    </div>
-                    
-                    
-                    <button @click="open = !open" 
-                            class="w-10 h-10 flex items-center justify-center rounded-2xl bg-white/90 backdrop-blur-xl border border-gray-200/80 shadow-lg shadow-gray-200/50 text-gray-600 hover:text-purple-600 transition-all duration-300">
-                        <svg x-show="!open" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-                        </svg>
-                        <svg x-show="open" x-cloak class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </div>
+                            <div class="p-4 border-b border-white/10" style="background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(249, 115, 22, 0.15));">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="font-bold text-white flex items-center gap-2">
+                                        <i class="fa-solid fa-bell text-amber-400"></i>
+                                        <?php echo e($locale == 'ku' ? 'ئاگادارکردنەوەکان' : ($locale == 'ar' ? 'الإشعارات' : 'Notifications')); ?>
 
-        
-        <div x-show="open" 
-             x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="opacity-0 -translate-y-4"
-             x-transition:enter-end="opacity-100 translate-y-0"
-             x-transition:leave="transition ease-in duration-200"
-             x-transition:leave-start="opacity-100 translate-y-0"
-             x-transition:leave-end="opacity-0 -translate-y-4"
-             x-cloak
-             class="lg:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-dark-100 shadow-xl">
-            <div class="max-w-7xl mx-auto px-4 py-6 space-y-2">
-                <?php $__currentLoopData = $navItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <a href="<?php echo e(route($item['route'])); ?>" 
-                       @click="open = false"
-                       class="flex items-center gap-4 p-4 rounded-2xl transition-all
-                       <?php echo e(request()->routeIs($item['route']) 
-                          ? 'bg-gradient-to-r from-primary-500 to-accent-500 text-white shadow-lg' 
-                          : 'text-dark-600 hover:bg-dark-50'); ?>">
-                        <div class="w-10 h-10 rounded-xl flex items-center justify-center
-                             <?php echo e(request()->routeIs($item['route']) ? 'bg-white/20' : 'bg-primary-50'); ?>">
-                            <i class="fa-solid <?php echo e($item['icon']); ?> <?php echo e(request()->routeIs($item['route']) ? 'text-white' : 'text-primary-500'); ?>"></i>
-                        </div>
-                        <span class="font-medium"><?php echo e($item['label']); ?></span>
-                    </a>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                
-                <?php if(auth()->guard()->check()): ?>
-                    <?php if (\Illuminate\Support\Facades\Blade::check('admin')): ?>
-                        <a href="<?php echo e(route('dashboard')); ?>" @click="open = false"
-                           class="flex items-center gap-4 p-4 rounded-2xl transition-all
-                           <?php echo e(request()->routeIs('dashboard') ? 'bg-gradient-to-r from-primary-500 to-accent-500 text-white' : 'text-dark-600 hover:bg-dark-50'); ?>">
-                            <div class="w-10 h-10 rounded-xl flex items-center justify-center <?php echo e(request()->routeIs('dashboard') ? 'bg-white/20' : 'bg-primary-50'); ?>">
-                                <i class="fa-solid fa-gauge-high <?php echo e(request()->routeIs('dashboard') ? 'text-white' : 'text-primary-500'); ?>"></i>
+                                    </h3>
+                                    <span class="px-2 py-1 bg-amber-500/20 text-amber-400 text-xs font-bold rounded-lg">4 <?php echo e($locale == 'ku' ? 'نوێ' : ($locale == 'ar' ? 'جديد' : 'New')); ?></span>
+                                </div>
                             </div>
-                            <span class="font-medium"><?php echo e(__('messages.dashboard')); ?></span>
-                        </a>
+                            
+                            
+                            <div class="max-h-80 overflow-y-auto">
+                                
+                                <a href="<?php echo e(route('orders.index')); ?>" class="flex items-start gap-3 p-4 hover:bg-white/5 transition-all border-b border-white/5">
+                                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center text-white flex-shrink-0">
+                                        <i class="fa-solid fa-box-check"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="text-white font-semibold text-sm"><?php echo e($locale == 'ku' ? 'داواکاریەکەت گەیشت!' : ($locale == 'ar' ? 'وصل طلبك!' : 'Order Delivered!')); ?></p>
+                                        <p class="text-white/50 text-xs mt-1"><?php echo e($locale == 'ku' ? 'داواکاری #1234 گەیشتە دەستت' : ($locale == 'ar' ? 'الطلب #1234 وصل إليك' : 'Order #1234 has been delivered')); ?></p>
+                                        <span class="text-amber-400 text-xs mt-2 inline-block"><?php echo e($locale == 'ku' ? '٢ کاتژمێر لەمەوپێش' : ($locale == 'ar' ? 'منذ ساعتين' : '2 hours ago')); ?></span>
+                                    </div>
+                                </a>
+                                
+                                
+                                <a href="<?php echo e(route('products.index')); ?>" class="flex items-start gap-3 p-4 hover:bg-white/5 transition-all border-b border-white/5">
+                                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center text-white flex-shrink-0">
+                                        <i class="fa-solid fa-sparkles"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="text-white font-semibold text-sm"><?php echo e($locale == 'ku' ? 'بەرهەمی نوێ!' : ($locale == 'ar' ? 'منتج جديد!' : 'New Product!')); ?></p>
+                                        <p class="text-white/50 text-xs mt-1"><?php echo e($locale == 'ku' ? 'کۆڵەکشنی نوێی هاوینە ئامادەیە' : ($locale == 'ar' ? 'مجموعة الصيف الجديدة متوفرة' : 'New summer collection is available')); ?></p>
+                                        <span class="text-amber-400 text-xs mt-2 inline-block"><?php echo e($locale == 'ku' ? '٥ کاتژمێر لەمەوپێش' : ($locale == 'ar' ? 'منذ 5 ساعات' : '5 hours ago')); ?></span>
+                                    </div>
+                                </a>
+                                
+                                
+                                <a href="<?php echo e(route('products.index')); ?>" class="flex items-start gap-3 p-4 hover:bg-white/5 transition-all border-b border-white/5">
+                                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-rose-600 flex items-center justify-center text-white flex-shrink-0">
+                                        <i class="fa-solid fa-percent"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="text-white font-semibold text-sm"><?php echo e($locale == 'ku' ? 'داشکاندنی تایبەت!' : ($locale == 'ar' ? 'خصم خاص!' : 'Special Discount!')); ?></p>
+                                        <p class="text-white/50 text-xs mt-1"><?php echo e($locale == 'ku' ? 'تا ٥٠٪ داشکان لە هەموو جلەکان' : ($locale == 'ar' ? 'خصم حتى 50% على جميع الملابس' : 'Up to 50% off on all clothes')); ?></p>
+                                        <span class="text-amber-400 text-xs mt-2 inline-block"><?php echo e($locale == 'ku' ? 'دوێنێ' : ($locale == 'ar' ? 'أمس' : 'Yesterday')); ?></span>
+                                    </div>
+                                </a>
+                                
+                                
+                                <a href="<?php echo e(route('orders.index')); ?>" class="flex items-start gap-3 p-4 hover:bg-white/5 transition-all">
+                                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white flex-shrink-0">
+                                        <i class="fa-solid fa-truck-fast"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="text-white font-semibold text-sm"><?php echo e($locale == 'ku' ? 'داواکاریەکەت نێردرا!' : ($locale == 'ar' ? 'تم شحن طلبك!' : 'Order Shipped!')); ?></p>
+                                        <p class="text-white/50 text-xs mt-1"><?php echo e($locale == 'ku' ? 'داواکاری #1235 لە ڕێگادایە' : ($locale == 'ar' ? 'الطلب #1235 في الطريق' : 'Order #1235 is on its way')); ?></p>
+                                        <span class="text-amber-400 text-xs mt-2 inline-block"><?php echo e($locale == 'ku' ? '٢ ڕۆژ لەمەوپێش' : ($locale == 'ar' ? 'منذ يومين' : '2 days ago')); ?></span>
+                                    </div>
+                                </a>
+                            </div>
+                            
+                            
+                            <a href="#" class="block p-4 text-center text-cyan-400 hover:bg-white/5 transition-all font-semibold border-t border-white/10">
+                                <?php echo e($locale == 'ku' ? 'هەموو ئاگادارکردنەوەکان ببینە' : ($locale == 'ar' ? 'عرض جميع الإشعارات' : 'View All Notifications')); ?>
+
+                                <i class="fa-solid fa-arrow-<?php echo e($isRtl ? 'left' : 'right'); ?> ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
                     <?php endif; ?>
-                <?php endif; ?> 
-                 
-                
-                <div class="pt-4 mt-4 border-t border-dark-100">
-                    <div class="flex items-center gap-2 mb-4">
-                        <i class="fa-solid fa-globe text-purple-500"></i>
-                        <span class="font-medium text-dark-700"><?php echo e(__('messages.language')); ?></span>
-                    </div>
-                    <div class="grid grid-cols-3 gap-2">
-                        <a href="<?php echo e(route('language.switch', 'ku')); ?>" 
-                           class="flex items-center justify-center p-3 rounded-xl border-2 transition-all
-                           <?php echo e(app()->getLocale() == 'ku' ? 'border-purple-500 bg-purple-50 text-purple-700 font-bold' : 'border-gray-200 hover:border-purple-300 text-gray-700'); ?>">
-                            <span class="text-sm">کوردی</span>
-                        </a>
-                        <a href="<?php echo e(route('language.switch', 'ar')); ?>" 
-                           class="flex items-center justify-center p-3 rounded-xl border-2 transition-all
-                           <?php echo e(app()->getLocale() == 'ar' ? 'border-purple-500 bg-purple-50 text-purple-700 font-bold' : 'border-gray-200 hover:border-purple-300 text-gray-700'); ?>">
-                            <span class="text-sm">العربية</span>
-                        </a>
-                        <a href="<?php echo e(route('language.switch', 'en')); ?>" 
-                           class="flex items-center justify-center p-3 rounded-xl border-2 transition-all
-                           <?php echo e(app()->getLocale() == 'en' ? 'border-purple-500 bg-purple-50 text-purple-700 font-bold' : 'border-gray-200 hover:border-purple-300 text-gray-700'); ?>">
-                            <span class="text-sm">English</span>
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="pt-4 mt-4 border-t border-dark-100">
+                    
+                    
+                    <?php
+                        $cartItemCount = 0;
+                        if (auth()->check()) {
+                            $userCart = \App\Models\Cart::where('user_id', auth()->id())->first();
+                            if ($userCart) {
+                                $cartItemCount = \App\Models\CartItem::where('cart_id', $userCart->id)->count();
+                            }
+                        }
+                    ?>
+                    <a href="<?php echo e(route('cart.index')); ?>" class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 hover:scale-110 transition-all relative">
+                        <i class="fa-solid fa-bag-shopping text-lg"></i>
+                        <?php if($cartItemCount > 0): ?>
+                        <span class="absolute -top-2 -right-2 w-5 h-5 sm:w-6 sm:h-6 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full text-white text-xs font-bold flex items-center justify-center shadow-lg">
+                            <?php echo e($cartItemCount); ?>
+
+                        </span>
+                        <?php endif; ?>
+                    </a>
+
+                    
                     <?php if(auth()->guard()->check()): ?>
-                        <div class="flex items-center justify-between p-4 bg-dark-50 rounded-2xl">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center text-white font-bold">
+                        <div class="relative hidden sm:block">
+                            <button @click="userMenu = !userMenu" class="flex items-center gap-3 px-3 py-2 rounded-xl glass hover:bg-white/10 transition-all">
+                                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold">
                                     <?php echo e(strtoupper(substr(auth()->user()->name, 0, 1))); ?>
 
                                 </div>
-                                <span class="font-medium text-dark-700"><?php echo e(auth()->user()->name); ?></span>
+                                <span class="font-semibold text-white/80 hidden md:block"><?php echo e(Str::limit(auth()->user()->name, 8)); ?></span>
+                                <i class="fa-solid fa-chevron-down text-white/50 text-xs transition-transform hidden md:block" :class="userMenu && 'rotate-180'"></i>
+                            </button>
+                            
+                            
+                            <div x-show="userMenu" x-cloak
+                                 x-transition:enter="transition ease-out duration-200"
+                                 x-transition:enter-start="opacity-0 scale-95 -translate-y-2"
+                                 x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                                 class="absolute <?php echo e($isRtl ? 'left-0' : 'right-0'); ?> mt-3 w-64 glass-strong rounded-2xl shadow-2xl shadow-black/50 border border-white/10 overflow-hidden z-50">
+                                
+                                
+                                <div class="p-4 border-b border-white/10 bg-gradient-to-r from-purple-500/10 to-pink-500/10">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                                            <?php echo e(strtoupper(substr(auth()->user()->name, 0, 1))); ?>
+
+                                        </div>
+                                        <div>
+                                            <p class="font-bold text-white"><?php echo e(auth()->user()->name); ?></p>
+                                            <p class="text-sm text-white/50"><?php echo e(auth()->user()->email); ?></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                
+                                <div class="p-2">
+                                    <a href="<?php echo e(route('orders.index')); ?>" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:text-white hover:bg-white/10 transition-all group">
+                                        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center group-hover:from-cyan-500 group-hover:to-blue-500 transition-all">
+                                            <i class="fa-solid fa-box text-cyan-400 group-hover:text-white"></i>
+                                        </div>
+                                        <div>
+                                            <p class="font-semibold"><?php echo e($locale == 'ku' ? 'داواکاریەکانم' : ($locale == 'ar' ? 'طلباتي' : 'My Orders')); ?></p>
+                                        </div>
+                                    </a>
+                                    
+                                    
+                                    <div x-data="{ langOpen: false }" class="relative">
+                                        <button @click="langOpen = !langOpen" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:text-white hover:bg-white/10 transition-all group">
+                                            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500/20 to-teal-500/20 flex items-center justify-center group-hover:from-emerald-500 group-hover:to-teal-500 transition-all">
+                                                <i class="fa-solid fa-language text-emerald-400 group-hover:text-white"></i>
+                                            </div>
+                                            <div class="flex-1 flex items-center justify-between">
+                                                <p class="font-semibold"><?php echo e($locale == 'ku' ? 'زمان' : ($locale == 'ar' ? 'اللغة' : 'Language')); ?></p>
+                                                <i class="fa-solid fa-chevron-down text-xs transition-transform" :class="langOpen && 'rotate-180'"></i>
+                                            </div>
+                                        </button>
+                                        <div x-show="langOpen" x-cloak x-transition class="mt-1 mx-2 p-2 bg-white/5 rounded-xl border border-white/10">
+                                            <a href="<?php echo e(route('language.switch', 'ku')); ?>" class="flex items-center gap-3 px-3 py-2 rounded-lg <?php echo e($locale == 'ku' ? 'bg-cyan-500/20 text-cyan-400' : 'text-white/60 hover:bg-white/10 hover:text-white'); ?> transition-all">
+                                                <span>🇮🇶</span><span class="text-sm">کوردی</span>
+                                                <?php if($locale == 'ku'): ?><i class="fa-solid fa-check <?php echo e($isRtl ? 'mr-auto' : 'ml-auto'); ?> text-cyan-400 text-xs"></i><?php endif; ?>
+                                            </a>
+                                            <a href="<?php echo e(route('language.switch', 'ar')); ?>" class="flex items-center gap-3 px-3 py-2 rounded-lg <?php echo e($locale == 'ar' ? 'bg-cyan-500/20 text-cyan-400' : 'text-white/60 hover:bg-white/10 hover:text-white'); ?> transition-all">
+                                                <span>🇸🇦</span><span class="text-sm">عربي</span>
+                                                <?php if($locale == 'ar'): ?><i class="fa-solid fa-check <?php echo e($isRtl ? 'mr-auto' : 'ml-auto'); ?> text-cyan-400 text-xs"></i><?php endif; ?>
+                                            </a>
+                                            <a href="<?php echo e(route('language.switch', 'en')); ?>" class="flex items-center gap-3 px-3 py-2 rounded-lg <?php echo e($locale == 'en' ? 'bg-cyan-500/20 text-cyan-400' : 'text-white/60 hover:bg-white/10 hover:text-white'); ?> transition-all">
+                                                <span>🇺🇸</span><span class="text-sm">English</span>
+                                                <?php if($locale == 'en'): ?><i class="fa-solid fa-check <?php echo e($isRtl ? 'mr-auto' : 'ml-auto'); ?> text-cyan-400 text-xs"></i><?php endif; ?>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    <a href="<?php echo e(route('settings.index')); ?>" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:text-white hover:bg-white/10 transition-all group">
+                                        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center group-hover:from-purple-500 group-hover:to-pink-500 transition-all">
+                                            <i class="fa-solid fa-gear text-purple-400 group-hover:text-white"></i>
+                                        </div>
+                                        <div>
+                                            <p class="font-semibold"><?php echo e($locale == 'ku' ? 'ڕێکخستنەکان' : ($locale == 'ar' ? 'الإعدادات' : 'Settings')); ?></p>
+                                        </div>
+                                    </a>
+                                    
+                                    <?php if (\Illuminate\Support\Facades\Blade::check('admin')): ?>
+                                        <a href="<?php echo e(route('dashboard')); ?>" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:text-white hover:bg-white/10 transition-all group">
+                                            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500/20 to-orange-500/20 flex items-center justify-center group-hover:from-amber-500 group-hover:to-orange-500 transition-all">
+                                                <i class="fa-solid fa-gauge-high text-amber-400 group-hover:text-white"></i>
+                                            </div>
+                                            <div>
+                                                <p class="font-semibold"><?php echo e($locale == 'ku' ? 'داشبۆرد' : ($locale == 'ar' ? 'لوحة التحكم' : 'Dashboard')); ?></p>
+                                            </div>
+                                        </a>
+                                    <?php endif; ?>
+                                </div>
+                                
+                                
+                                <div class="p-2 border-t border-white/10">
+                                    <form action="<?php echo e(route('logout')); ?>" method="POST">
+                                        <?php echo csrf_field(); ?>
+                                        <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:text-white hover:bg-red-500/20 transition-all group">
+                                            <div class="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center group-hover:bg-red-500 transition-all">
+                                                <i class="fa-solid fa-right-from-bracket"></i>
+                                            </div>
+                                            <p class="font-semibold"><?php echo e($locale == 'ku' ? 'چوونەدەرەوە' : ($locale == 'ar' ? 'تسجيل الخروج' : 'Logout')); ?></p>
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
-                            <form action="<?php echo e(route('logout')); ?>" method="POST">
-                                <?php echo csrf_field(); ?>
-                                <button type="submit" class="w-10 h-10 rounded-xl bg-red-50 text-red-500 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center">
-                                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                                </button>
-                            </form>
                         </div>
                     <?php else: ?>
-                        <div class="grid grid-cols-2 gap-3">
-                            <a href="<?php echo e(route('login')); ?>" class="p-4 text-center rounded-2xl border-2 border-dark-200 font-medium text-dark-700 hover:border-primary-500 hover:text-primary-600 transition-all">
-                                <?php echo e(__('messages.login')); ?>
+                        <a href="<?php echo e(route('login')); ?>" class="hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 hover:scale-105 transition-all text-sm">
+                            <i class="fa-solid fa-right-to-bracket"></i>
+                            <span><?php echo e($locale == 'ku' ? 'چوونەژوورەوە' : ($locale == 'ar' ? 'تسجيل الدخول' : 'Login')); ?></span>
+                        </a>
+                    <?php endif; ?>
 
-                            </a>
-                            <a href="<?php echo e(route('register')); ?>" class="p-4 text-center rounded-2xl btn-primary text-white font-medium">
-                                <?php echo e(__('messages.register')); ?>
+                    
+                    <button @click="open = !open" class="lg:hidden w-11 h-11 rounded-xl glass flex items-center justify-center text-white/70 hover:text-white transition-all">
+                        <i x-show="!open" class="fa-solid fa-bars text-xl"></i>
+                        <i x-show="open" class="fa-solid fa-xmark text-xl" x-cloak></i>
+                    </button>
+                </div>
+            </div>
 
-                            </a>
+            
+            <div x-show="open" x-cloak 
+                 x-transition:enter="transition ease-out duration-300"
+                 x-transition:enter-start="opacity-0 -translate-y-4"
+                 x-transition:enter-end="opacity-100 translate-y-0"
+                 class="lg:hidden mt-4 p-4 glass-strong rounded-2xl border border-white/10">
+                
+                <?php if(auth()->guard()->check()): ?>
+                    
+                    <div class="flex items-center gap-3 p-4 mb-4 rounded-xl bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-white/10">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                            <?php echo e(strtoupper(substr(auth()->user()->name, 0, 1))); ?>
+
                         </div>
+                        <div>
+                            <p class="font-bold text-white"><?php echo e(auth()->user()->name); ?></p>
+                            <p class="text-sm text-white/50"><?php echo e(auth()->user()->email); ?></p>
+                        </div>
+                    </div>
+                <?php endif; ?>
+                
+                
+                <div class="space-y-2 mb-4">
+                    <?php $__currentLoopData = $menuItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <a href="<?php echo e(route($item['route'])); ?>" @click="open = false"
+                           class="flex items-center gap-3 px-4 py-3 rounded-xl <?php echo e(request()->routeIs($item['route']) ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg' : 'glass text-white/70 hover:text-white hover:bg-white/10'); ?> transition-all">
+                            <i class="fa-solid <?php echo e($item['icon']); ?> text-lg"></i>
+                            <span class="font-semibold"><?php echo e($item['label']); ?></span>
+                        </a>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    
+                    <?php if(auth()->guard()->check()): ?>
+                        <?php if (\Illuminate\Support\Facades\Blade::check('admin')): ?>
+                            <a href="<?php echo e(route('dashboard')); ?>" @click="open = false"
+                               class="flex items-center gap-3 px-4 py-3 rounded-xl <?php echo e(request()->routeIs('dashboard') ? 'bg-gradient-to-r from-purple-500 to-pink-600 text-white shadow-lg' : 'glass text-white/70 hover:text-white hover:bg-white/10'); ?> transition-all">
+                                <i class="fa-solid fa-gauge-high text-lg"></i>
+                                <span class="font-semibold"><?php echo e($locale == 'ku' ? 'داشبۆرد' : 'Dashboard'); ?></span>
+                            </a>
+                        <?php endif; ?>
                     <?php endif; ?>
                 </div>
+                
+<?php if(auth()->guard()->check()): ?>
+                    
+                    <form action="<?php echo e(route('logout')); ?>" method="POST">
+                        <?php echo csrf_field(); ?>
+                        <button type="submit" class="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-xl bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white transition-all font-semibold">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            <?php echo e($locale == 'ku' ? 'چوونەدەرەوە' : 'Logout'); ?>
+
+                        </button>
+                    </form>
+                <?php else: ?>
+                    
+                    <div class="grid grid-cols-2 gap-3">
+                        <a href="<?php echo e(route('login')); ?>" class="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold shadow-lg">
+                            <i class="fa-solid fa-right-to-bracket"></i>
+                            <?php echo e($locale == 'ku' ? 'چوونەژوورەوە' : 'Login'); ?>
+
+                        </a>
+                        <a href="<?php echo e(route('register')); ?>" class="flex items-center justify-center gap-2 px-4 py-3 rounded-xl glass text-white/70 hover:text-white font-bold border border-white/10">
+                            <i class="fa-solid fa-user-plus"></i>
+                            <?php echo e($locale == 'ku' ? 'تۆمارکردن' : 'Register'); ?>
+
+                        </a>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </nav>
 
     
-    <div class="h-14 sm:h-16 lg:h-20"></div>
+    <div class="h-20 sm:h-24"></div>
 
     
-    <main class="<?php if($pd == 'true'): ?> max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full <?php endif; ?> grow">
+    <main class="<?php if($pd == 'true'): ?> max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full <?php endif; ?> grow relative z-10">
         <?php echo e($slot); ?>
 
     </main>
@@ -574,37 +648,34 @@ unset($__defined_vars, $__key, $__value); ?>
 <?php endif; ?>
 
     
-    <footer class="bg-dark-900 text-white mt-auto relative overflow-hidden">
+    <footer class="relative mt-auto overflow-hidden border-t border-white/10 bg-black/40 backdrop-blur-xl">
         
-        <div class="absolute top-0 right-0 w-96 h-96 bg-primary-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-        <div class="absolute bottom-0 left-0 w-96 h-96 bg-accent-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+        <div class="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
         
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 relative z-10">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12">
                 
                 <div class="col-span-2 md:col-span-1 space-y-6">
                     <a href="<?php echo e(route('home')); ?>" class="flex items-center gap-3 group">
-                        
                         <div class="relative">
-                            <div class="w-11 h-11 bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform rotate-3 group-hover:rotate-0">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
-                                </svg>
+                            <div class="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-cyan-500/30 group-hover:shadow-cyan-500/50 transition-all group-hover:scale-105">
+                                <i class="fa-solid fa-crown text-white text-xl"></i>
                             </div>
+                            <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-gradient-to-br from-pink-500 to-purple-500 rounded-lg"></div>
                         </div>
                         <div class="flex flex-col">
-                            <span class="text-xl font-black">
-                                <span class="bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent">کورد</span>
-                                <span class="text-white">مارکە</span>
-                            </span>
+                            <span class="text-xl font-black text-white">Luxe<span class="text-gradient-cyan">Shop</span></span>
+                            <span class="text-xs text-white/50">Premium Fashion</span>
                         </div>
                     </a>
-                    <p class="text-dark-400 text-sm leading-relaxed">
-                        مۆدای باڵا بۆ ئەوانەی جیاوازی دەخوازن. کوالیتی لەگەڵ ستایل.
+                    <p class="text-white/50 text-sm leading-relaxed">
+                        <?php echo e($locale == 'ku' ? 'مۆدای باڵا بۆ ئەوانەی جیاوازی دەخوازن. کوالیتی لەگەڵ ستایل.' : 'Premium fashion for those who want to stand out. Quality meets style.'); ?>
+
                     </p>
                     <div class="flex gap-3">
                         <?php $__currentLoopData = ['facebook-f', 'instagram', 'twitter', 'tiktok']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $social): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <a href="#" class="w-10 h-10 rounded-xl bg-dark-800 flex items-center justify-center text-dark-400 hover:bg-gradient-to-br hover:from-purple-500 hover:to-pink-500 hover:text-white transition-all">
+                            <a href="#" class="w-10 h-10 rounded-xl glass flex items-center justify-center text-white/50 hover:bg-gradient-to-br hover:from-cyan-500 hover:to-blue-600 hover:text-white hover:shadow-lg hover:shadow-cyan-500/30 transition-all">
                                 <i class="fa-brands fa-<?php echo e($social); ?>"></i>
                             </a>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -613,60 +684,60 @@ unset($__defined_vars, $__key, $__value); ?>
 
                 
                 <div>
-                    <h4 class="font-semibold mb-4 text-white"><?php echo e(__('messages.shop')); ?></h4>
+                    <h4 class="font-bold mb-4 text-white"><?php echo e($locale == 'ku' ? 'فرۆشگا' : 'Shop'); ?></h4>
                     <ul class="space-y-3">
                         <?php
-                            $shopLinks = app()->getLocale() == 'ku' 
+                            $shopLinks = $locale == 'ku' 
                                 ? ['نوێترین ئامادەکراو', 'باشترین فرۆش', 'داشکاندن', 'کۆلێکشن']
                                 : ['New Arrivals', 'Best Sellers', 'Discounts', 'Collections'];
                         ?>
                         <?php $__currentLoopData = $shopLinks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $link): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <li><a href="<?php echo e(route('products.index')); ?>" class="text-sm text-dark-400 hover:text-primary-400 transition-colors"><?php echo e($link); ?></a></li>
+                            <li><a href="<?php echo e(route('products.index')); ?>" class="text-sm text-white/50 hover:text-cyan-400 transition-colors"><?php echo e($link); ?></a></li>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </ul>
                 </div>
 
                 
                 <div>
-                    <h4 class="font-semibold mb-4 text-white"><?php echo e(app()->getLocale() == 'ku' ? 'یارمەتی' : 'Support'); ?></h4>
+                    <h4 class="font-bold mb-4 text-white"><?php echo e($locale == 'ku' ? 'یارمەتی' : 'Support'); ?></h4>
                     <ul class="space-y-3">
                         <?php
-                            $supportLinks = app()->getLocale() == 'ku' 
+                            $supportLinks = $locale == 'ku' 
                                 ? ['پرسیارە دووپاتکراوەکان', 'گواستنەوە', 'گەڕاندنەوە', 'شوێنپێکەوتنی داواکاری']
                                 : ['FAQs', 'Shipping', 'Returns', 'Track Order'];
                         ?>
                         <?php $__currentLoopData = $supportLinks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $link): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <li><a href="#" class="text-sm text-dark-400 hover:text-primary-400 transition-colors"><?php echo e($link); ?></a></li>
+                            <li><a href="#" class="text-sm text-white/50 hover:text-cyan-400 transition-colors"><?php echo e($link); ?></a></li>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </ul>
                 </div>
 
                 
                 <div>
-                    <h4 class="font-semibold mb-4 text-white"><?php echo e(__('messages.contact_us')); ?></h4>
-                    <ul class="space-y-3 text-sm text-dark-400">
+                    <h4 class="font-bold mb-4 text-white"><?php echo e($locale == 'ku' ? 'پەیوەندی' : 'Contact'); ?></h4>
+                    <ul class="space-y-3 text-sm text-white/50">
                         <li class="flex items-center gap-2">
-                            <i class="fa-solid fa-envelope text-primary-400"></i>
-                            hello@snapstyle.com
+                            <i class="fa-solid fa-envelope text-cyan-400"></i>
+                            hello@luxeshop.com
                         </li>
                         <li class="flex items-center gap-2">
-                            <i class="fa-solid fa-phone text-primary-400"></i>
+                            <i class="fa-solid fa-phone text-cyan-400"></i>
                             +964 750 123 4567
                         </li>
                         <li class="flex items-start gap-2">
-                            <i class="fa-solid fa-location-dot text-primary-400 mt-1"></i>
-                            <span>شەقامی مۆدا ١٢٣<br>هەولێر، کوردستان</span>
+                            <i class="fa-solid fa-location-dot text-cyan-400 mt-1"></i>
+                            <span><?php echo e($locale == 'ku' ? 'شەقامی مۆدا ١٢٣' : '123 Fashion Street'); ?><br><?php echo e($locale == 'ku' ? 'هەولێر، کوردستان' : 'Erbil, Kurdistan'); ?></span>
                         </li>
                     </ul>
                 </div>
             </div>
             
             
-            <div class="mt-12 pt-8 border-t border-dark-800 flex flex-col sm:flex-row justify-between items-center gap-4">
-                <p class="text-sm text-dark-500">© <?php echo e(date('Y')); ?> <?php echo e(app()->getLocale() == 'ku' ? 'کورد مارکەت. هەموو مافەکان پارێزراون.' : 'Kurd Market. All rights reserved.'); ?></p>
-                <div class="flex items-center gap-6 text-sm text-dark-500">
-                    <a href="#" class="hover:text-primary-400 transition-colors"><?php echo e(__('messages.privacy_policy')); ?></a>
-                    <a href="#" class="hover:text-primary-400 transition-colors"><?php echo e(__('messages.terms')); ?></a>
+            <div class="mt-12 pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <p class="text-sm text-white/40">© <?php echo e(date('Y')); ?> LuxeShop. <?php echo e($locale == 'ku' ? 'هەموو مافەکان پارێزراون.' : 'All rights reserved.'); ?></p>
+                <div class="flex items-center gap-6 text-sm text-white/40">
+                    <a href="#" class="hover:text-cyan-400 transition-colors"><?php echo e($locale == 'ku' ? 'سیاسەتی تایبەتمەندی' : 'Privacy Policy'); ?></a>
+                    <a href="#" class="hover:text-cyan-400 transition-colors"><?php echo e($locale == 'ku' ? 'مەرجەکان' : 'Terms'); ?></a>
                 </div>
             </div>
         </div>

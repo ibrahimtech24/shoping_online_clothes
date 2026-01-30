@@ -119,4 +119,25 @@ class Product extends Model
     {
         return $this->hasMany(ProductSize::class);
     }
+
+    // Get available colors for this product
+    public function getAvailableColorsAttribute()
+    {
+        return $this->productsizes
+            ->whereNotNull('color')
+            ->where('quantity', '>', 0)
+            ->unique('color_code')
+            ->map(function($item) {
+                return [
+                    'name' => $item->color,
+                    'code' => $item->color_code
+                ];
+            })->values();
+    }
+
+    // Get sizes with relationship
+    public function sizes()
+    {
+        return $this->hasManyThrough(Size::class, ProductSize::class, 'product_id', 'id', 'id', 'size_id');
+    }
 }

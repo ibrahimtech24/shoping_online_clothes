@@ -51,4 +51,9 @@ class PageController extends Controller
             "orderfinished" => $orderfinished,
         ]);
     }
+
+    public function settings()
+    {
+        return view("settings.index");
+    }
 }
