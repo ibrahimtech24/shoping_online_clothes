@@ -1,94 +1,146 @@
-{{-- Shopping Guide Section --}}
-<section class="py-20 bg-gradient-to-br from-white to-gray-50">
-    <div class="max-w-7xl mx-auto px-4">
-        {{-- Section Header --}}
-        <div class="text-center mb-16">
-            <div class="inline-block px-4 py-2 bg-gradient-to-r from-indigo-100 to-purple-100 rounded-full text-indigo-600 text-sm font-semibold mb-6">
-                {{ app()->getLocale() == 'ku' ? '🛍️ ڕێبەری کڕین' : (app()->getLocale() == 'ar' ? '🛍️ دليل التسوق' : '🛍️ Shopping Guide') }}
+{{-- 🎨 REDESIGNED Shopping Guide Section - Ultra Modern & Fully Responsive --}}
+<section class="relative py-24 md:py-32 overflow-hidden bg-gradient-to-br from-slate-50 via-white to-purple-50">
+    {{-- Animated Background Elements --}}
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-40 -left-40 w-96 h-96 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-gradient-to-br from-pink-400/20 to-orange-400/20 rounded-full blur-3xl animate-pulse" style="animation-delay: 1.5s;"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-cyan-300/10 via-purple-300/10 to-pink-300/10 rounded-full blur-3xl animate-spin" style="animation-duration: 20s;"></div>
+    </div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {{-- ✨ Enhanced Section Header --}}
+        <div class="text-center mb-20">
+            <div x-data="{ show: false }" x-init="setTimeout(() => show = true, 100)" 
+                 x-show="show" x-transition:enter="transition ease-out duration-1000"
+                 x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100"
+                 class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full text-white text-sm md:text-base font-bold mb-8 shadow-xl shadow-indigo-500/30 hover:shadow-2xl hover:shadow-indigo-500/50 transition-all duration-300">
+                <i class="fa-solid fa-shopping-bag animate-bounce"></i>
+                <span>{{ app()->getLocale() == 'ku' ? 'ڕێبەری کڕینی ئۆنلاین' : (app()->getLocale() == 'ar' ? 'دليل التسوق الإلكتروني' : 'Online Shopping Guide') }}</span>
             </div>
-            <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-                {{ app()->getLocale() == 'ku' ? 'چۆن' : (app()->getLocale() == 'ar' ? 'كيف' : 'How to') }}
-                <span class="bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
-                    {{ app()->getLocale() == 'ku' ? 'بکڕیت؟' : (app()->getLocale() == 'ar' ? 'تتسوق؟' : 'Shop?') }}
+            
+            <h2 class="text-4xl sm:text-5xl lg:text-7xl font-black text-gray-900 mb-6 leading-tight">
+                <span class="inline-block" x-data="{ show: false }" x-init="setTimeout(() => show = true, 300)" 
+                      x-show="show" x-transition:enter="transition ease-out duration-700"
+                      x-transition:enter-start="opacity-0 translate-y-10" x-transition:enter-end="opacity-100 translate-y-0">
+                    {{ app()->getLocale() == 'ku' ? 'چۆن' : (app()->getLocale() == 'ar' ? 'كيف' : 'How to') }}
+                </span>
+                <br class="sm:hidden">
+                <span class="relative inline-block" x-data="{ show: false }" x-init="setTimeout(() => show = true, 500)" 
+                      x-show="show" x-transition:enter="transition ease-out duration-700"
+                      x-transition:enter-start="opacity-0 translate-y-10" x-transition:enter-end="opacity-100 translate-y-0">
+                    <span class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent animate-gradient">
+                        {{ app()->getLocale() == 'ku' ? 'بکڕیت؟' : (app()->getLocale() == 'ar' ? 'تتسوق؟' : 'Shop Smart?') }}
+                    </span>
+                    <svg class="absolute -bottom-2 left-0 w-full h-3" viewBox="0 0 300 10" preserveAspectRatio="none">
+                        <path d="M0,5 Q75,0 150,5 T300,5" stroke="url(#gradient)" stroke-width="3" fill="none" stroke-linecap="round"/>
+                        <defs>
+                            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:#a855f7;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
                 </span>
             </h2>
-            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                {{ app()->getLocale() == 'ku' ? 'ڕێبەرێکی ئاسان بۆ ئەوەی چۆن بە باشترین شێوە لە فرۆشگاکەمان بکڕیت' : (app()->getLocale() == 'ar' ? 'دليل بسيط لكيفية التسوق بأفضل طريقة من متجرنا' : 'A simple guide on how to shop from our store in the best way possible') }}
+            
+            <p class="text-lg sm:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed"
+               x-data="{ show: false }" x-init="setTimeout(() => show = true, 700)" 
+               x-show="show" x-transition:enter="transition ease-out duration-700"
+               x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+                {{ app()->getLocale() == 'ku' ? 'ڕێنماییەکی تەواو و ئاسان بۆ بژاردن و کڕینی باشترین بەرهەمەکان بە شێوەیەکی زیرەکانە و پارەت پاشەکەوت بکەیت' : (app()->getLocale() == 'ar' ? 'دليل كامل وبسيط لاختيار وشراء أفضل المنتجات بطريقة ذكية وتوفير المال' : 'A complete and simple guide to choosing and buying the best products smartly and save money') }}
             </p>
         </div>
 
-        {{-- Shopping Steps --}}
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
+        {{-- 🎯 Shopping Steps - Modern Cards with Animations --}}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 mb-24">
             @php
             $steps = [
                 [
                     'number' => '01',
                     'icon' => 'fa-magnifying-glass',
+                    'gradient' => 'from-blue-500 to-cyan-500',
+                    'bg' => 'from-blue-50 to-cyan-50',
                     'title_ku' => 'گەڕان و دۆزینەوە',
                     'title_ar' => 'البحث والاكتشاف',
                     'title_en' => 'Browse & Discover',
-                    'desc_ku' => 'لە نێو هەزاران بەرهەمی جیاواز بگەڕێیت و ئەوەی کە دەتەوێت بدۆزەرەوە',
-                    'desc_ar' => 'تصفح من بين آلاف المنتجات المتنوعة واعثر على ما تريده',
-                    'desc_en' => 'Browse through thousands of diverse products and find what you need',
-                    'color' => 'blue'
+                    'desc_ku' => 'گەڕان لە کۆمەڵەیەکی زۆر لە بەرهەمی جۆراوجۆر و دۆزینەوەی بەرهەمە نایابەکان',
+                    'desc_ar' => 'تصفح مجموعة كبيرة من المنتجات المتنوعة واكتشف المنتجات الفريدة',
+                    'desc_en' => 'Browse a huge collection of diverse products and find unique items',
                 ],
                 [
                     'number' => '02',
                     'icon' => 'fa-heart',
-                    'title_ku' => 'زیادکردن بۆ خۆشەویستەکان',
-                    'title_ar' => 'إضافة للمفضلة',
+                    'gradient' => 'from-pink-500 to-rose-500',
+                    'bg' => 'from-pink-50 to-rose-50',
+                    'title_ku' => 'خۆشەویستەکان',
+                    'title_ar' => 'المفضلة',
                     'title_en' => 'Add to Wishlist',
-                    'desc_ku' => 'بەرهەمەکانی بەدڵت زیاد بکە بۆ لیستی خۆشەویستەکانت بۆ کڕینی دواتر',
-                    'desc_ar' => 'أضف المنتجات التي تعجبك إلى قائمة المفضلة للشراء لاحقاً',
-                    'desc_en' => 'Add your favorite products to wishlist for later purchase',
-                    'color' => 'red'
+                    'desc_ku' => 'بەرهەمە دڵخوازەکانت زیاد بکە بۆ لیستی خۆشەویستەکان بۆ کڕینی دواتر',
+                    'desc_ar' => 'أضف المنتجات المفضلة إلى القائمة للشراء لاحقاً',
+                    'desc_en' => 'Save your favorite products to wishlist for future purchase',
                 ],
                 [
                     'number' => '03',
                     'icon' => 'fa-shopping-cart',
+                    'gradient' => 'from-green-500 to-emerald-500',
+                    'bg' => 'from-green-50 to-emerald-50',
                     'title_ku' => 'زیادکردن بۆ سەبەتە',
                     'title_ar' => 'إضافة إلى السلة',
                     'title_en' => 'Add to Cart',
-                    'desc_ku' => 'بەرهەمەکانت زیاد بکە بۆ سەبەتی کڕین و قەبارە و بڕەکە دیاری بکە',
-                    'desc_ar' => 'أضف المنتجات إلى سلة التسوق وحدد المقاس والكمية',
-                    'desc_en' => 'Add products to your cart and select size and quantity',
-                    'color' => 'green'
+                    'desc_ku' => 'بەرهەمەکان زیاد بکە بۆ سەبەتی کڕین و قەبارە و بڕی مەبەستت دیاری بکە',
+                    'desc_ar' => 'أضف المنتجات إلى السلة وحدد المقاس والكمية المطلوبة',
+                    'desc_en' => 'Add products to cart and select your desired size and quantity',
                 ],
                 [
                     'number' => '04',
                     'icon' => 'fa-credit-card',
-                    'title_ku' => 'پارەدان و داواکردن',
-                    'title_ar' => 'الدفع والطلب',
-                    'title_en' => 'Checkout & Pay',
-                    'desc_ku' => 'زانیاری گەیاندنەکەت پڕ بکەرەوە و بە ئاسانی پارەکەت بدە',
-                    'desc_ar' => 'اكمل معلومات التوصيل وادفع بسهولة',
-                    'desc_en' => 'Complete delivery info and pay easily',
-                    'color' => 'purple'
+                    'gradient' => 'from-purple-500 to-indigo-500',
+                    'bg' => 'from-purple-50 to-indigo-50',
+                    'title_ku' => 'پارەدان و وەرگرتن',
+                    'title_ar' => 'الدفع والاستلام',
+                    'title_en' => 'Checkout & Receive',
+                    'desc_ku' => 'زانیارییەکانت تەواو بکە، پارە بدە و بەرهەمەکانت بە خێرایی وەربگرە',
+                    'desc_ar' => 'أكمل بياناتك وادفع واستلم منتجاتك بسرعة',
+                    'desc_en' => 'Complete your info, pay securely and receive products fast',
                 ]
             ];
             @endphp
 
             @foreach($steps as $index => $step)
-                <div class="relative group">
-                    {{-- Connection Line (except for last item) --}}
+                <div class="relative group" 
+                     x-data="{ show: false }" 
+                     x-init="setTimeout(() => show = true, {{ 900 + ($index * 150) }})" 
+                     x-show="show" 
+                     x-transition:enter="transition ease-out duration-700"
+                     x-transition:enter-start="opacity-0 translate-y-10" 
+                     x-transition:enter-end="opacity-100 translate-y-0">
+                    
+                    {{-- Connection Line (Desktop Only) --}}
                     @if($index < count($steps) - 1)
-                        <div class="hidden lg:block absolute top-16 left-1/2 w-full h-0.5 bg-gradient-to-r from-{{ $step['color'] }}-300 to-transparent transform translate-x-8 z-0"></div>
+                        <div class="hidden lg:block absolute top-20 left-1/2 w-full h-1 bg-gradient-to-r {{ $step['gradient'] }}/20 z-0">
+                            <div class="h-full bg-gradient-to-r {{ $step['gradient'] }} animate-pulse" style="width: 0%; animation: fillLine 2s ease-in-out forwards {{ 1.2 + ($index * 0.3) }}s;"></div>
+                        </div>
                     @endif
                     
                     {{-- Step Card --}}
-                    <div class="relative bg-white rounded-3xl shadow-lg border border-gray-100 p-8 hover:shadow-2xl hover:shadow-{{ $step['color'] }}-500/20 transition-all duration-500 hover:-translate-y-2 z-10">
-                        {{-- Step Number --}}
-                        <div class="absolute -top-4 -left-4 w-12 h-12 bg-gradient-to-br from-{{ $step['color'] }}-500 to-{{ $step['color'] }}-600 rounded-2xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                    <div class="relative bg-white rounded-3xl shadow-xl border-2 border-transparent hover:border-gradient-to-r {{ $step['gradient'] }} p-8 transition-all duration-500 hover:-translate-y-4 hover:shadow-2xl z-10 h-full">
+                        {{-- Step Number Badge --}}
+                        <div class="absolute -top-5 -left-5 w-16 h-16 bg-gradient-to-br {{ $step['gradient'] }} rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-2xl transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
                             {{ $step['number'] }}
+                            <div class="absolute inset-0 bg-white/20 rounded-2xl blur-sm group-hover:blur-md transition-all"></div>
                         </div>
                         
-                        {{-- Icon --}}
-                        <div class="w-20 h-20 bg-gradient-to-br from-{{ $step['color'] }}-100 to-{{ $step['color'] }}-200 rounded-3xl flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform duration-300">
-                            <i class="fa-solid {{ $step['icon'] }} text-3xl text-{{ $step['color'] }}-600"></i>
+                        {{-- Icon Container --}}
+                        <div class="mb-6 flex justify-center">
+                            <div class="relative w-24 h-24 bg-gradient-to-br {{ $step['bg'] }} rounded-3xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-lg">
+                                <i class="fa-solid {{ $step['icon'] }} text-4xl bg-gradient-to-br {{ $step['gradient'] }} bg-clip-text text-transparent"></i>
+                                <div class="absolute inset-0 bg-gradient-to-br {{ $step['gradient'] }} opacity-0 group-hover:opacity-10 rounded-3xl transition-opacity duration-300"></div>
+                            </div>
                         </div>
                         
                         {{-- Title --}}
-                        <h3 class="text-xl font-bold text-gray-900 mb-4 text-center">
+                        <h3 class="text-xl md:text-2xl font-black text-gray-900 mb-4 text-center group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:{{ $step['gradient'] }} group-hover:bg-clip-text transition-all duration-300">
                             @if(app()->getLocale() == 'ku')
                                 {{ $step['title_ku'] }}
                             @elseif(app()->getLocale() == 'ar')
@@ -98,6 +150,39 @@
                             @endif
                         </h3>
                         
+                        {{-- Description --}}
+                        <p class="text-gray-600 text-center leading-relaxed text-sm md:text-base">
+                            @if(app()->getLocale() == 'ku')
+                                {{ $step['desc_ku'] }}
+                            @elseif(app()->getLocale() == 'ar')
+                                {{ $step['desc_ar'] }}
+                            @else
+                                {{ $step['desc_en'] }}
+                            @endif
+                        </p>
+
+                        {{-- Decorative Corner --}}
+                        <div class="absolute bottom-4 right-4 w-12 h-12 bg-gradient-to-br {{ $step['gradient'] }} opacity-5 rounded-full blur-xl group-hover:opacity-20 transition-opacity"></div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        <style>
+            @keyframes fillLine {
+                from { width: 0%; }
+                to { width: 100%; }
+            }
+            @keyframes gradient {
+                0%, 100% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+            }
+            .animate-gradient {
+                background-size: 200% auto;
+                animation: gradient 3s ease infinite;
+            }
+        </style>
+
                         {{-- Description --}}
                         <p class="text-gray-600 text-center leading-relaxed">
                             @if(app()->getLocale() == 'ku')

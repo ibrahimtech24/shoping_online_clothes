@@ -9,225 +9,247 @@
 <?php endif; ?>
 <?php $component->withAttributes([]); ?>
     
-    <section class="relative bg-gradient-to-br from-slate-900 via-purple-900 to-indigo-900 py-20 overflow-hidden">
+    
+    
+    <section class="relative min-h-[50vh] md:min-h-[55vh] flex items-center overflow-hidden">
         
-        <div class="absolute inset-0">
-            <div class="absolute -top-40 -left-40 w-80 h-80 bg-gradient-to-br from-cyan-500/30 to-blue-600/30 rounded-full blur-3xl animate-pulse"></div>
-            <div class="absolute -bottom-40 -right-40 w-80 h-80 bg-gradient-to-br from-pink-500/30 to-purple-600/30 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
-            <div class="absolute top-20 left-1/2 w-60 h-60 bg-gradient-to-br from-yellow-400/20 to-orange-500/20 rounded-full blur-3xl animate-bounce" style="animation-duration: 4s;"></div>
+        <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"></div>
+        
+        
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute -top-1/2 -right-1/4 w-[800px] h-[800px] bg-violet-600/20 rounded-full blur-[150px]"></div>
+            <div class="absolute -bottom-1/2 -left-1/4 w-[600px] h-[600px] bg-cyan-600/15 rounded-full blur-[150px]"></div>
         </div>
 
-        <div class="relative max-w-7xl mx-auto px-4 text-center text-white">
-            <div class="inline-block px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-sm font-medium mb-6 border border-white/20">
-                <?php echo e(app()->getLocale() == 'ku' ? '🛍️ فرۆشگای ئۆنلاین' : (app()->getLocale() == 'ar' ? '🛍️ متجر إلكتروني' : '🛍️ Online Store')); ?>
+        
+        <div class="absolute inset-0 opacity-[0.015]" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 256 256%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E');"></div>
 
-            </div>
-            <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6">
-                <?php echo e(app()->getLocale() == 'ku' ? 'بەرهەمەکانی' : (app()->getLocale() == 'ar' ? 'منتجاتنا' : 'Our Products')); ?>
+        
+        <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 py-16 md:py-20">
+            <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+                
+                
+                <div class="text-center md:text-<?php echo e(app()->getLocale() == 'ku' || app()->getLocale() == 'ar' ? 'right' : 'left'); ?>">
+                    
+                    <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-full border border-white/10 mb-6">
+                        <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                        <span class="text-white/80 text-sm font-medium tracking-wide">
+                            <?php echo e(app()->getLocale() == 'ku' ? 'کۆلێکشنی نوێ' : (app()->getLocale() == 'ar' ? 'مجموعة جديدة' : 'New Collection')); ?>
 
-                <span class="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-pulse">
-                    <?php echo e(app()->getLocale() == 'ku' ? 'نایاب' : (app()->getLocale() == 'ar' ? 'المميزة' : 'Premium')); ?>
+                        </span>
+                    </div>
 
-                </span>
-            </h1>
-            <p class="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
-                <?php echo e(app()->getLocale() == 'ku' ? 'کۆمەڵێک بەرهەمی جوان و باش کە بە وردی هەڵبژێردراون بۆ دەربڕینی ستایلی تایبەتی خۆت' : (app()->getLocale() == 'ar' ? 'مجموعة من المنتجات الجميلة والجودة المختارة بعناية للتعبير عن أسلوبك الخاص' : 'Discover premium products carefully selected to express your unique style and personality')); ?>
+                    
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight tracking-tight">
+                        <?php echo e(app()->getLocale() == 'ku' ? 'جل و بەرگی' : (app()->getLocale() == 'ar' ? 'الملابس' : 'Premium')); ?>
 
-            </p>
+                        <span class="block text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-cyan-400">
+                            <?php echo e(app()->getLocale() == 'ku' ? 'پڕیمیۆم' : (app()->getLocale() == 'ar' ? 'الفاخرة' : 'Fashion')); ?>
 
-            
-            <div class="flex justify-center items-center gap-8 mt-12">
-                <div class="text-center">
-                    <div class="text-3xl font-bold text-white"><?php echo e($products->total()); ?>+</div>
-                    <div class="text-sm text-gray-300"><?php echo e(app()->getLocale() == 'ku' ? 'بەرهەم' : (app()->getLocale() == 'ar' ? 'منتج' : 'Products')); ?></div>
+                        </span>
+                    </h1>
+
+                    
+                    <p class="text-white/60 text-base sm:text-lg max-w-md mx-auto md:mx-0 mb-8 leading-relaxed">
+                        <?php echo e(app()->getLocale() == 'ku' ? 'باشترین بەرهەمەکان بە نرخی گونجاو و کوالیتیی بەرز' : (app()->getLocale() == 'ar' ? 'أفضل المنتجات بأسعار مناسبة وجودة عالية' : 'Best products at great prices with premium quality')); ?>
+
+                    </p>
+
+                    
+                    <div class="flex flex-wrap gap-3 justify-center md:justify-<?php echo e(app()->getLocale() == 'ku' || app()->getLocale() == 'ar' ? 'end' : 'start'); ?>">
+                        <a href="#products" class="group inline-flex items-center gap-2 px-6 py-3 bg-white text-slate-900 rounded-xl font-semibold hover:bg-white/90 transition-all hover:shadow-lg hover:shadow-white/20">
+                            <span><?php echo e(app()->getLocale() == 'ku' ? 'بینینی بەرهەمەکان' : (app()->getLocale() == 'ar' ? 'تصفح المنتجات' : 'Browse Products')); ?></span>
+                            <i class="fa-solid fa-arrow-<?php echo e(app()->getLocale() == 'ku' || app()->getLocale() == 'ar' ? 'left' : 'right'); ?> group-hover:translate-x-<?php echo e(app()->getLocale() == 'ku' || app()->getLocale() == 'ar' ? '-1' : '1'); ?> transition-transform"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="w-px h-8 bg-white/20"></div>
-                <div class="text-center">
-                    <div class="text-3xl font-bold text-white"><?php echo e($categories->count()); ?>+</div>
-                    <div class="text-sm text-gray-300"><?php echo e(app()->getLocale() == 'ku' ? 'جۆر' : (app()->getLocale() == 'ar' ? 'فئة' : 'Categories')); ?></div>
-                </div>
-                <div class="w-px h-8 bg-white/20"></div>
-                <div class="text-center">
-                    <div class="text-3xl font-bold text-white">24/7</div>
-                    <div class="text-sm text-gray-300"><?php echo e(app()->getLocale() == 'ku' ? 'پشتگیری' : (app()->getLocale() == 'ar' ? 'دعم' : 'Support')); ?></div>
+
+                
+                <div class="flex justify-center md:justify-end">
+                    <div class="relative">
+                        
+                        <div class="absolute -inset-4 bg-gradient-to-r from-violet-600/30 to-cyan-600/30 rounded-3xl blur-2xl opacity-60"></div>
+                        
+                        
+                        <div class="relative bg-white/[0.03] backdrop-blur-xl rounded-2xl border border-white/10 p-8 min-w-[280px]">
+                            
+                            <div class="space-y-6">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 bg-gradient-to-br from-violet-500/20 to-violet-500/5 rounded-xl flex items-center justify-center border border-violet-500/20">
+                                        <i class="fa-solid fa-box text-violet-400"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-2xl font-bold text-white"><?php echo e($products->total()); ?>+</div>
+                                        <div class="text-sm text-white/50"><?php echo e(app()->getLocale() == 'ku' ? 'بەرهەم' : (app()->getLocale() == 'ar' ? 'منتج' : 'Products')); ?></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+                                
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 bg-gradient-to-br from-cyan-500/20 to-cyan-500/5 rounded-xl flex items-center justify-center border border-cyan-500/20">
+                                        <i class="fa-solid fa-layer-group text-cyan-400"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-2xl font-bold text-white"><?php echo e($categories->count()); ?></div>
+                                        <div class="text-sm text-white/50"><?php echo e(app()->getLocale() == 'ku' ? 'جۆر' : (app()->getLocale() == 'ar' ? 'فئة' : 'Categories')); ?></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+                                
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 rounded-xl flex items-center justify-center border border-emerald-500/20">
+                                        <i class="fa-solid fa-truck-fast text-emerald-400"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-2xl font-bold text-white">24h</div>
+                                        <div class="text-sm text-white/50"><?php echo e(app()->getLocale() == 'ku' ? 'گەیاندن' : (app()->getLocale() == 'ar' ? 'توصيل سريع' : 'Fast Delivery')); ?></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <div class="py-6 sm:py-10 bg-gray-50 min-h-screen">
-        <div class="max-w-7xl mx-auto px-4">
+    
+    <section class="relative bg-gradient-to-b from-slate-50 to-white min-h-screen py-12 md:py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
             
-            <?php echo $__env->make('products.partials.header', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
-
-            <div class="flex flex-col lg:flex-row gap-6 lg:gap-8">
-                
-                <div x-data="{ showFilters: false }" class="lg:hidden">
-                    <button @click="showFilters = !showFilters" 
-                            class="w-full flex items-center justify-center gap-2 bg-white border border-dark-200 text-dark-700 py-3 px-6 rounded-xl font-medium mb-4 hover:bg-gray-50 transition-colors">
-                        <i class="fa-solid fa-filter"></i>
-                        <span x-text="showFilters ? '<?php echo e(app()->getLocale() == 'ku' ? 'شاردنەوەی فلتەر' : (app()->getLocale() == 'ar' ? 'إخفاء المرشحات' : 'Hide Filters')); ?>' : '<?php echo e(app()->getLocale() == 'ku' ? 'نیشاندانی فلتەر' : (app()->getLocale() == 'ar' ? 'إظهار المرشحات' : 'Show Filters')); ?>'"></span>
-                    </button>
+            
+            <div class="relative -mt-20 mb-12">
+                <div class="bg-white rounded-[2rem] shadow-2xl shadow-purple-500/10 p-6 sm:p-8 border border-gray-100">
                     
+                    <form action="<?php echo e(route('products.index')); ?>" method="GET">
+                        <div class="relative mb-6">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-6">
+                                <i class="fa-solid fa-magnifying-glass text-xl text-purple-400"></i>
+                            </div>
+                            <input type="text" 
+                                   name="search"
+                                   value="<?php echo e(request('search')); ?>"
+                                   placeholder="<?php echo e(app()->getLocale() == 'ku' ? 'گەڕان بۆ بەرهەم...' : (app()->getLocale() == 'ar' ? 'البحث عن منتج...' : 'Search for products...')); ?>"
+                                   class="w-full pl-16 pr-40 py-5 text-lg rounded-2xl bg-slate-50 border-2 border-transparent focus:border-purple-400 focus:bg-white focus:ring-4 focus:ring-purple-500/10 outline-none transition-all placeholder:text-gray-400">
+                            <button type="submit" 
+                                    class="absolute right-2 top-1/2 -translate-y-1/2 bg-gradient-to-r from-purple-600 via-fuchsia-600 to-pink-600 hover:from-purple-700 hover:via-fuchsia-700 hover:to-pink-700 text-white px-8 py-3.5 rounded-xl font-bold transition-all hover:shadow-lg hover:shadow-purple-500/30 hover:scale-105">
+                                <i class="fa-solid fa-search mr-2"></i>
+                                <?php echo e(app()->getLocale() == 'ku' ? 'گەڕان' : (app()->getLocale() == 'ar' ? 'بحث' : 'Search')); ?>
+
+                            </button>
+                        </div>
+                    </form>
+
                     
-                    <div x-show="showFilters" x-collapse class="mb-6">
-                        <?php echo $__env->make('products.partials.filters', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
-                    </div>
-                </div>
+                    <form action="<?php echo e(route('products.index')); ?>" method="GET" class="flex flex-wrap items-center gap-3 sm:gap-4">
+                        <?php if(request('search')): ?>
+                            <input type="hidden" name="search" value="<?php echo e(request('search')); ?>">
+                        <?php endif; ?>
 
-                
-                <div class="hidden lg:block w-80 shrink-0">
-                    <?php echo $__env->make('products.partials.filters', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
-                </div>
-
-                
-                <div class="flex-1">
-                    <?php if(count($products)): ?>
                         
-                        <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                            <?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <div class="product-card">
-                                    <?php echo $__env->make('products.partials.product-card', ['product' => $product], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
-                                </div>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <div class="relative group">
+                            <select name="category" onchange="this.form.submit()" 
+                                    class="appearance-none pl-12 pr-10 py-3.5 rounded-xl bg-gradient-to-r from-purple-50 to-fuchsia-50 border-2 border-purple-100 hover:border-purple-300 focus:border-purple-400 outline-none font-semibold text-gray-700 cursor-pointer transition-all min-w-[180px]">
+                                <option value=""><?php echo e(app()->getLocale() == 'ku' ? 'هەموو جۆرەکان' : (app()->getLocale() == 'ar' ? 'جميع الفئات' : 'All Categories')); ?></option>
+                                <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($cat->id); ?>" <?php echo e(request('category') == $cat->id ? 'selected' : ''); ?>><?php echo e($cat->name); ?></option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </select>
+                            <i class="fa-solid fa-layer-group absolute left-4 top-1/2 -translate-y-1/2 text-purple-500"></i>
+                            <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-purple-400 text-sm"></i>
                         </div>
+
                         
-                        
-                        <div class="mt-12">
-                            <div class="bg-white rounded-2xl border border-gray-200 p-6">
-                                <?php echo e($products->links()); ?>
-
-                                
-                                
-                                <div class="text-center text-sm text-gray-500 mt-4">
-                                    <?php echo e(app()->getLocale() == 'ku' ? 'نیشاندانی' : (app()->getLocale() == 'ar' ? 'عرض' : 'Showing')); ?>
-
-                                    <?php echo e($products->firstItem()); ?> <?php echo e(app()->getLocale() == 'ku' ? 'بۆ' : (app()->getLocale() == 'ar' ? 'إلى' : 'to')); ?>
-
-                                    <?php echo e($products->lastItem()); ?> <?php echo e(app()->getLocale() == 'ku' ? 'لە' : (app()->getLocale() == 'ar' ? 'من' : 'of')); ?>
-
-                                    <?php echo e($products->total()); ?> <?php echo e(app()->getLocale() == 'ku' ? 'ئەنجام' : (app()->getLocale() == 'ar' ? 'نتيجة' : 'results')); ?>
-
-                                </div>
-                            </div>
+                        <div class="relative group">
+                            <select name="price_range" onchange="this.form.submit()" 
+                                    class="appearance-none pl-12 pr-10 py-3.5 rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-100 hover:border-green-300 focus:border-green-400 outline-none font-semibold text-gray-700 cursor-pointer transition-all min-w-[150px]">
+                                <option value=""><?php echo e(app()->getLocale() == 'ku' ? 'نرخ' : (app()->getLocale() == 'ar' ? 'السعر' : 'Price')); ?></option>
+                                <option value="0-50" <?php echo e(request('price_range') == '0-50' ? 'selected' : ''); ?>>$0 - $50</option>
+                                <option value="50-100" <?php echo e(request('price_range') == '50-100' ? 'selected' : ''); ?>>$50 - $100</option>
+                                <option value="100-200" <?php echo e(request('price_range') == '100-200' ? 'selected' : ''); ?>>$100 - $200</option>
+                                <option value="200+" <?php echo e(request('price_range') == '200+' ? 'selected' : ''); ?>>$200+</option>
+                            </select>
+                            <i class="fa-solid fa-dollar-sign absolute left-4 top-1/2 -translate-y-1/2 text-green-500"></i>
+                            <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-green-400 text-sm"></i>
                         </div>
-                    <?php else: ?>
+
                         
-                        <div class="text-center py-20">
-                            <div class="w-32 h-32 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-8">
-                                <i class="fa-solid fa-search text-5xl text-gray-400"></i>
-                            </div>
-                            <h3 class="text-3xl font-bold text-gray-900 mb-4">
-                                <?php echo e(app()->getLocale() == 'ku' ? 'هیچ بەرهەمێک نەدۆزرایەوە' : (app()->getLocale() == 'ar' ? 'لم يتم العثور على منتجات' : 'No products found')); ?>
-
-                            </h3>
-                            <p class="text-gray-600 mb-8 text-lg max-w-md mx-auto">
-                                <?php echo e(app()->getLocale() == 'ku' ? 'تکایە فلتەرەکانت بگۆڕە یان زاراوەی گەڕانت تاقی بکەرەوە' : (app()->getLocale() == 'ar' ? 'يرجى تغيير المرشحات أو المحاولة مرة أخرى' : 'Try adjusting your filters or search terms')); ?>
-
-                            </p>
-                            
-                            
-                            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                                <a href="<?php echo e(route('products.index')); ?>" 
-                                   class="inline-flex items-center gap-2 bg-primary-500 text-white px-8 py-4 rounded-xl font-semibold hover:bg-primary-600 transition-colors">
-                                    <i class="fa-solid fa-refresh"></i>
-                                    <?php echo e(app()->getLocale() == 'ku' ? 'هەموو بەرهەمەکان' : (app()->getLocale() == 'ar' ? 'جميع المنتجات' : 'View All Products')); ?>
-
-                                </a>
-                                <button onclick="document.querySelector('input[name=search]').focus()" 
-                                        class="inline-flex items-center gap-2 bg-white border-2 border-gray-200 text-gray-700 px-8 py-4 rounded-xl font-semibold hover:border-primary-300 transition-colors">
-                                    <i class="fa-solid fa-search"></i>
-                                    <?php echo e(app()->getLocale() == 'ku' ? 'گەڕانی نوێ' : (app()->getLocale() == 'ar' ? 'بحث جديد' : 'New Search')); ?>
-
-                                </button>
-                            </div>
+                        <div class="relative group">
+                            <select name="sort" onchange="this.form.submit()" 
+                                    class="appearance-none pl-12 pr-10 py-3.5 rounded-xl bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-100 hover:border-amber-300 focus:border-amber-400 outline-none font-semibold text-gray-700 cursor-pointer transition-all min-w-[150px]">
+                                <option value="latest" <?php echo e(request('sort', 'latest') == 'latest' ? 'selected' : ''); ?>><?php echo e(app()->getLocale() == 'ku' ? 'نوێترین' : (app()->getLocale() == 'ar' ? 'الأحدث' : 'Latest')); ?></option>
+                                <option value="price_low" <?php echo e(request('sort') == 'price_low' ? 'selected' : ''); ?>><?php echo e(app()->getLocale() == 'ku' ? 'نرخ ↑' : (app()->getLocale() == 'ar' ? 'سعر ↑' : 'Price ↑')); ?></option>
+                                <option value="price_high" <?php echo e(request('sort') == 'price_high' ? 'selected' : ''); ?>><?php echo e(app()->getLocale() == 'ku' ? 'نرخ ↓' : (app()->getLocale() == 'ar' ? 'سعر ↓' : 'Price ↓')); ?></option>
+                            </select>
+                            <i class="fa-solid fa-arrow-up-wide-short absolute left-4 top-1/2 -translate-y-1/2 text-amber-500"></i>
+                            <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-amber-400 text-sm"></i>
                         </div>
-                    <?php endif; ?>
+
+                        
+                        <?php if(request()->hasAny(['category', 'price_range', 'sort', 'search'])): ?>
+                            <a href="<?php echo e(route('products.index')); ?>" 
+                               class="inline-flex items-center gap-2 px-5 py-3.5 rounded-xl bg-red-50 text-red-600 hover:bg-red-100 font-bold transition-all border-2 border-red-100 hover:border-red-200 hover:scale-105">
+                                <i class="fa-solid fa-xmark"></i>
+                                <?php echo e(app()->getLocale() == 'ku' ? 'پاککردنەوە' : (app()->getLocale() == 'ar' ? 'مسح' : 'Clear')); ?>
+
+                            </a>
+                        <?php endif; ?>
+                    </form>
                 </div>
             </div>
-        </div>
-    </div>
 
-    
-    <?php if (isset($component)) { $__componentOriginalb8b3634a7a912249ea20a86aa79171a7 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginalb8b3634a7a912249ea20a86aa79171a7 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.modals.quick-view','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('modals.quick-view'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes([]); ?>
-<?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginalb8b3634a7a912249ea20a86aa79171a7)): ?>
-<?php $attributes = $__attributesOriginalb8b3634a7a912249ea20a86aa79171a7; ?>
-<?php unset($__attributesOriginalb8b3634a7a912249ea20a86aa79171a7); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginalb8b3634a7a912249ea20a86aa79171a7)): ?>
-<?php $component = $__componentOriginalb8b3634a7a912249ea20a86aa79171a7; ?>
-<?php unset($__componentOriginalb8b3634a7a912249ea20a86aa79171a7); ?>
-<?php endif; ?>
-
-    
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Countdown timers
-        document.querySelectorAll('[data-countdown]').forEach(function(element) {
-            const countdownDate = new Date(element.getAttribute('data-countdown')).getTime();
             
-            const timer = setInterval(function() {
-                const now = new Date().getTime();
-                const distance = countdownDate - now;
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-2xl sm:text-3xl font-black text-gray-900">
+                        <?php echo e(app()->getLocale() == 'ku' ? 'بەرهەمەکان' : (app()->getLocale() == 'ar' ? 'المنتجات' : 'Products')); ?>
+
+                        <span class="text-purple-600">(<?php echo e($products->total()); ?>)</span>
+                    </h2>
+                </div>
+            </div>
+
+            
+            <?php if(count($products)): ?>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
+                    <?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <?php echo $__env->make('products.partials.product-card', ['product' => $product], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </div>
+
                 
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                <div class="mt-16 flex justify-center">
+                    <div class="bg-white rounded-2xl shadow-xl shadow-purple-500/5 p-4 border border-gray-100">
+                        <?php echo e($products->links()); ?>
+
+                    </div>
+                </div>
+            <?php else: ?>
                 
-                if (distance > 0) {
-                    element.querySelector('.countdown-days').textContent = days.toString().padStart(2, '0');
-                    element.querySelector('.countdown-hours').textContent = hours.toString().padStart(2, '0');
-                    element.querySelector('.countdown-minutes').textContent = minutes.toString().padStart(2, '0');
-                    element.querySelector('.countdown-seconds').textContent = seconds.toString().padStart(2, '0');
-                } else {
-                    clearInterval(timer);
-                    element.innerHTML = '<div class="text-red-600 font-bold"><?php echo e(app()->getLocale() == 'ku' ? 'داشکاندن کۆتایی هات' : (app()->getLocale() == 'ar' ? 'انتهى الخصم' : 'Offer Expired')); ?></div>';
-                }
-            }, 1000);
-        });
+                <div class="text-center py-24">
+                    <div class="w-40 h-40 bg-gradient-to-br from-purple-100 to-fuchsia-100 rounded-full flex items-center justify-center mx-auto mb-8 animate-pulse">
+                        <i class="fa-solid fa-box-open text-6xl text-purple-300"></i>
+                    </div>
+                    <h3 class="text-3xl font-black text-gray-900 mb-4">
+                        <?php echo e(app()->getLocale() == 'ku' ? 'هیچ بەرهەمێک نەدۆزرایەوە' : (app()->getLocale() == 'ar' ? 'لم يتم العثور على منتجات' : 'No products found')); ?>
 
-        // Wishlist functionality
-        document.querySelectorAll('.wishlist-btn').forEach(function(button) {
-            button.addEventListener('click', function() {
-                const productId = this.dataset.productId;
-                // Add wishlist logic here
-                this.querySelector('i').classList.toggle('fa-regular');
-                this.querySelector('i').classList.toggle('fa-solid');
-                this.classList.toggle('text-red-500');
-            });
-        });
+                    </h3>
+                    <p class="text-gray-500 mb-8 text-lg max-w-md mx-auto">
+                        <?php echo e(app()->getLocale() == 'ku' ? 'تکایە فلتەرەکان بگۆڕە' : (app()->getLocale() == 'ar' ? 'يرجى تغيير الفلاتر' : 'Try changing filters')); ?>
 
-        // Quick view functionality
-        document.querySelectorAll('.quick-view-btn').forEach(function(button) {
-            button.addEventListener('click', function() {
-                const productId = this.dataset.productId;
-                // Add quick view modal logic here
-                console.log('Quick view product:', productId);
-            });
-        });
+                    </p>
+                    <a href="<?php echo e(route('products.index')); ?>" 
+                       class="inline-flex items-center gap-3 bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white px-8 py-4 rounded-2xl font-bold hover:shadow-xl hover:shadow-purple-500/30 transition-all hover:-translate-y-1">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        <?php echo e(app()->getLocale() == 'ku' ? 'هەموو بەرهەمەکان' : (app()->getLocale() == 'ar' ? 'جميع المنتجات' : 'All Products')); ?>
 
-        // Compare functionality
-        document.querySelectorAll('.compare-btn').forEach(function(button) {
-            button.addEventListener('click', function() {
-                const productId = this.dataset.productId;
-                // Add compare logic here
-                console.log('Compare product:', productId);
-            });
-        });
-    });
-    </script>
+                    </a>
+                </div>
+            <?php endif; ?>
+        </div>
+    </section>
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal8a240419d16b3c1a159498153f053ed2)): ?>
