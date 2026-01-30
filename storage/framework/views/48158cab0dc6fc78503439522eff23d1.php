@@ -10,246 +10,263 @@
 <?php $component->withAttributes([]); ?>
     
     
-    
-    <section class="relative min-h-[50vh] md:min-h-[55vh] flex items-center overflow-hidden">
-        
-        <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"></div>
-        
-        
-        <div class="absolute inset-0 overflow-hidden">
-            <div class="absolute -top-1/2 -right-1/4 w-[800px] h-[800px] bg-violet-600/20 rounded-full blur-[150px]"></div>
-            <div class="absolute -bottom-1/2 -left-1/4 w-[600px] h-[600px] bg-cyan-600/15 rounded-full blur-[150px]"></div>
+    <div class="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-black">
+                
+        <div class="fixed inset-0 pointer-events-none overflow-hidden">
+            <div class="absolute -top-96 -left-96 w-96 h-96 bg-gradient-to-br from-cyan-500/20 to-blue-600/20 rounded-full blur-3xl animate-pulse"></div>
+            <div class="absolute -bottom-96 -right-96 w-96 h-96 bg-gradient-to-br from-pink-500/20 to-purple-600/20 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-br from-yellow-400/10 to-orange-500/10 rounded-full blur-3xl"></div>
         </div>
-
-        
-        <div class="absolute inset-0 opacity-[0.015]" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 256 256%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E');"></div>
-
-        
-        <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 py-16 md:py-20">
-            <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
                 
-                
-                <div class="text-center md:text-<?php echo e(app()->getLocale() == 'ku' || app()->getLocale() == 'ar' ? 'right' : 'left'); ?>">
+        <header class="sticky top-0 z-40 bg-slate-900/80 backdrop-blur-xl border-b border-white/10">
+            <div class="max-w-7xl mx-auto px-4 py-4">
+                <div class="flex items-center justify-between">
                     
-                    <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-full border border-white/10 mb-6">
-                        <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
-                        <span class="text-white/80 text-sm font-medium tracking-wide">
-                            <?php echo e(app()->getLocale() == 'ku' ? 'کۆلێکشنی نوێ' : (app()->getLocale() == 'ar' ? 'مجموعة جديدة' : 'New Collection')); ?>
+                    <div>
+                        <h1 class="text-xl md:text-2xl font-bold text-white">
+                            <?php echo e(app()->getLocale() == 'ku' ? 'دۆزینەوە' : (app()->getLocale() == 'ar' ? 'اكتشف' : 'Discover')); ?>
 
-                        </span>
+                        </h1>
+                        <p class="text-xs text-white/60"><?php echo e($products->total()); ?> <?php echo e(app()->getLocale() == 'ku' ? 'بەرهەم' : (app()->getLocale() == 'ar' ? 'منتج' : 'items')); ?></p>
                     </div>
-
                     
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight tracking-tight">
-                        <?php echo e(app()->getLocale() == 'ku' ? 'جل و بەرگی' : (app()->getLocale() == 'ar' ? 'الملابس' : 'Premium')); ?>
-
-                        <span class="block text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-cyan-400">
-                            <?php echo e(app()->getLocale() == 'ku' ? 'پڕیمیۆم' : (app()->getLocale() == 'ar' ? 'الفاخرة' : 'Fashion')); ?>
-
-                        </span>
-                    </h1>
-
                     
-                    <p class="text-white/60 text-base sm:text-lg max-w-md mx-auto md:mx-0 mb-8 leading-relaxed">
-                        <?php echo e(app()->getLocale() == 'ku' ? 'باشترین بەرهەمەکان بە نرخی گونجاو و کوالیتیی بەرز' : (app()->getLocale() == 'ar' ? 'أفضل المنتجات بأسعار مناسبة وجودة عالية' : 'Best products at great prices with premium quality')); ?>
-
-                    </p>
-
-                    
-                    <div class="flex flex-wrap gap-3 justify-center md:justify-<?php echo e(app()->getLocale() == 'ku' || app()->getLocale() == 'ar' ? 'end' : 'start'); ?>">
-                        <a href="#products" class="group inline-flex items-center gap-2 px-6 py-3 bg-white text-slate-900 rounded-xl font-semibold hover:bg-white/90 transition-all hover:shadow-lg hover:shadow-white/20">
-                            <span><?php echo e(app()->getLocale() == 'ku' ? 'بینینی بەرهەمەکان' : (app()->getLocale() == 'ar' ? 'تصفح المنتجات' : 'Browse Products')); ?></span>
-                            <i class="fa-solid fa-arrow-<?php echo e(app()->getLocale() == 'ku' || app()->getLocale() == 'ar' ? 'left' : 'right'); ?> group-hover:translate-x-<?php echo e(app()->getLocale() == 'ku' || app()->getLocale() == 'ar' ? '-1' : '1'); ?> transition-transform"></i>
-                        </a>
-                    </div>
-                </div>
-
-                
-                <div class="flex justify-center md:justify-end">
-                    <div class="relative">
-                        
-                        <div class="absolute -inset-4 bg-gradient-to-r from-violet-600/30 to-cyan-600/30 rounded-3xl blur-2xl opacity-60"></div>
-                        
-                        
-                        <div class="relative bg-white/[0.03] backdrop-blur-xl rounded-2xl border border-white/10 p-8 min-w-[280px]">
-                            
-                            <div class="space-y-6">
-                                <div class="flex items-center gap-4">
-                                    <div class="w-12 h-12 bg-gradient-to-br from-violet-500/20 to-violet-500/5 rounded-xl flex items-center justify-center border border-violet-500/20">
-                                        <i class="fa-solid fa-box text-violet-400"></i>
-                                    </div>
-                                    <div>
-                                        <div class="text-2xl font-bold text-white"><?php echo e($products->total()); ?>+</div>
-                                        <div class="text-sm text-white/50"><?php echo e(app()->getLocale() == 'ku' ? 'بەرهەم' : (app()->getLocale() == 'ar' ? 'منتج' : 'Products')); ?></div>
-                                    </div>
-                                </div>
-                                
-                                <div class="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
-                                
-                                <div class="flex items-center gap-4">
-                                    <div class="w-12 h-12 bg-gradient-to-br from-cyan-500/20 to-cyan-500/5 rounded-xl flex items-center justify-center border border-cyan-500/20">
-                                        <i class="fa-solid fa-layer-group text-cyan-400"></i>
-                                    </div>
-                                    <div>
-                                        <div class="text-2xl font-bold text-white"><?php echo e($categories->count()); ?></div>
-                                        <div class="text-sm text-white/50"><?php echo e(app()->getLocale() == 'ku' ? 'جۆر' : (app()->getLocale() == 'ar' ? 'فئة' : 'Categories')); ?></div>
-                                    </div>
-                                </div>
-                                
-                                <div class="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
-                                
-                                <div class="flex items-center gap-4">
-                                    <div class="w-12 h-12 bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 rounded-xl flex items-center justify-center border border-emerald-500/20">
-                                        <i class="fa-solid fa-truck-fast text-emerald-400"></i>
-                                    </div>
-                                    <div>
-                                        <div class="text-2xl font-bold text-white">24h</div>
-                                        <div class="text-sm text-white/50"><?php echo e(app()->getLocale() == 'ku' ? 'گەیاندن' : (app()->getLocale() == 'ar' ? 'توصيل سريع' : 'Fast Delivery')); ?></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="flex items-center gap-3">
+                        <button class="w-10 h-10 bg-white/10 rounded-2xl flex items-center justify-center hover:bg-white/20 transition-colors">
+                            <i class="fa-solid fa-bell text-white"></i>
+                        </button>
+                        <button class="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-cyan-500/30">
+                            <i class="fa-solid fa-bag-shopping text-white text-sm"></i>
+                        </button>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </header>
 
-    
-    <section class="relative bg-gradient-to-b from-slate-50 to-white min-h-screen py-12 md:py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <main class="max-w-7xl mx-auto px-4 py-6">
             
             
-            <div class="relative -mt-20 mb-12">
-                <div class="bg-white rounded-[2rem] shadow-2xl shadow-purple-500/10 p-6 sm:p-8 border border-gray-100">
+            <section class="mb-6">
+                <form action="<?php echo e(route('products.index')); ?>" method="GET">
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-5 top-1/2 -translate-y-1/2 text-white/50"></i>
+                        <input type="text" 
+                               name="search"
+                               value="<?php echo e(request('search')); ?>"
+                               placeholder="<?php echo e(app()->getLocale() == 'ku' ? 'گەڕان بۆ بەرهەم...' : (app()->getLocale() == 'ar' ? 'ابحث عن منتج...' : 'Search products...')); ?>"
+                               class="w-full pl-14 pr-14 py-4 bg-white/10 backdrop-blur-xl rounded-3xl border border-white/20 focus:border-cyan-400/50 focus:ring-4 focus:ring-cyan-500/10 outline-none transition-all text-white placeholder:text-white/50">
+                        <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 transition-shadow">
+                            <i class="fa-solid fa-sliders text-white text-sm"></i>
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            
+            <section class="mb-8">
+                <div class="flex gap-3 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4">
                     
-                    <form action="<?php echo e(route('products.index')); ?>" method="GET">
-                        <div class="relative mb-6">
-                            <div class="absolute inset-y-0 left-0 flex items-center pl-6">
-                                <i class="fa-solid fa-magnifying-glass text-xl text-purple-400"></i>
-                            </div>
-                            <input type="text" 
-                                   name="search"
-                                   value="<?php echo e(request('search')); ?>"
-                                   placeholder="<?php echo e(app()->getLocale() == 'ku' ? 'گەڕان بۆ بەرهەم...' : (app()->getLocale() == 'ar' ? 'البحث عن منتج...' : 'Search for products...')); ?>"
-                                   class="w-full pl-16 pr-40 py-5 text-lg rounded-2xl bg-slate-50 border-2 border-transparent focus:border-purple-400 focus:bg-white focus:ring-4 focus:ring-purple-500/10 outline-none transition-all placeholder:text-gray-400">
-                            <button type="submit" 
-                                    class="absolute right-2 top-1/2 -translate-y-1/2 bg-gradient-to-r from-purple-600 via-fuchsia-600 to-pink-600 hover:from-purple-700 hover:via-fuchsia-700 hover:to-pink-700 text-white px-8 py-3.5 rounded-xl font-bold transition-all hover:shadow-lg hover:shadow-purple-500/30 hover:scale-105">
-                                <i class="fa-solid fa-search mr-2"></i>
-                                <?php echo e(app()->getLocale() == 'ku' ? 'گەڕان' : (app()->getLocale() == 'ar' ? 'بحث' : 'Search')); ?>
+                    <a href="<?php echo e(route('products.index')); ?>" 
+                       class="flex-shrink-0 px-5 py-2.5 rounded-2xl font-medium text-sm transition-all whitespace-nowrap
+                              <?php echo e(!request('category') ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/30' : 'bg-white/10 text-white/80 hover:bg-white/20 border border-white/10'); ?>">
+                        <?php echo e(app()->getLocale() == 'ku' ? 'هەموو' : (app()->getLocale() == 'ar' ? 'الكل' : 'All')); ?>
+
+                    </a>
+                    
+                    <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <a href="<?php echo e(route('products.index', ['category' => $cat->id])); ?>" 
+                           class="flex-shrink-0 px-5 py-2.5 rounded-2xl font-medium text-sm transition-all whitespace-nowrap
+                                  <?php echo e(request('category') == $cat->id ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/30' : 'bg-white/10 text-white/80 hover:bg-white/20 border border-white/10'); ?>">
+                            <?php echo e($cat->name); ?>
+
+                        </a>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </div>
+            </section>
+
+            
+            <section class="mb-8">
+                <div class="relative bg-gradient-to-r from-indigo-900 via-purple-900 to-pink-900 rounded-3xl p-6 md:p-8 overflow-hidden">
+                    
+                    <div class="absolute -inset-2 bg-gradient-to-r from-cyan-500/30 via-purple-500/30 to-pink-500/30 rounded-3xl blur-xl"></div>
+                    
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+                    <div class="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
+                    
+                    <div class="relative z-10 flex items-center justify-between">
+                        <div class="flex-1">
+                            <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-white text-xs font-medium mb-3">
+                                <?php echo e(app()->getLocale() == 'ku' ? '✨ تایبەت' : (app()->getLocale() == 'ar' ? '✨ خاص' : '✨ Special')); ?>
+
+                            </span>
+                            <h2 class="text-xl md:text-2xl font-bold text-white mb-2">
+                                <?php echo e(app()->getLocale() == 'ku' ? 'داشکاندنی %30' : (app()->getLocale() == 'ar' ? 'خصم 30%' : '30% Off')); ?>
+
+                            </h2>
+                            <p class="text-white/80 text-sm mb-4">
+                                <?php echo e(app()->getLocale() == 'ku' ? 'لە هەموو بەرهەمەکان' : (app()->getLocale() == 'ar' ? 'على جميع المنتجات' : 'On all products')); ?>
+
+                            </p>
+                            <button class="px-5 py-2.5 bg-white text-indigo-600 rounded-2xl font-semibold text-sm hover:bg-white/90 transition-colors shadow-lg">
+                                <?php echo e(app()->getLocale() == 'ku' ? 'ئێستا بکڕە' : (app()->getLocale() == 'ar' ? 'تسوق الآن' : 'Shop Now')); ?>
 
                             </button>
                         </div>
-                    </form>
-
-                    
-                    <form action="<?php echo e(route('products.index')); ?>" method="GET" class="flex flex-wrap items-center gap-3 sm:gap-4">
-                        <?php if(request('search')): ?>
-                            <input type="hidden" name="search" value="<?php echo e(request('search')); ?>">
-                        <?php endif; ?>
-
-                        
-                        <div class="relative group">
-                            <select name="category" onchange="this.form.submit()" 
-                                    class="appearance-none pl-12 pr-10 py-3.5 rounded-xl bg-gradient-to-r from-purple-50 to-fuchsia-50 border-2 border-purple-100 hover:border-purple-300 focus:border-purple-400 outline-none font-semibold text-gray-700 cursor-pointer transition-all min-w-[180px]">
-                                <option value=""><?php echo e(app()->getLocale() == 'ku' ? 'هەموو جۆرەکان' : (app()->getLocale() == 'ar' ? 'جميع الفئات' : 'All Categories')); ?></option>
-                                <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <option value="<?php echo e($cat->id); ?>" <?php echo e(request('category') == $cat->id ? 'selected' : ''); ?>><?php echo e($cat->name); ?></option>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            </select>
-                            <i class="fa-solid fa-layer-group absolute left-4 top-1/2 -translate-y-1/2 text-purple-500"></i>
-                            <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-purple-400 text-sm"></i>
+                        <div class="hidden sm:block w-32 h-32 md:w-40 md:h-40">
+                            <div class="w-full h-full bg-white/20 backdrop-blur-sm rounded-3xl flex items-center justify-center">
+                                <i class="fa-solid fa-gift text-4xl md:text-5xl text-white"></i>
+                            </div>
                         </div>
-
-                        
-                        <div class="relative group">
-                            <select name="price_range" onchange="this.form.submit()" 
-                                    class="appearance-none pl-12 pr-10 py-3.5 rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-100 hover:border-green-300 focus:border-green-400 outline-none font-semibold text-gray-700 cursor-pointer transition-all min-w-[150px]">
-                                <option value=""><?php echo e(app()->getLocale() == 'ku' ? 'نرخ' : (app()->getLocale() == 'ar' ? 'السعر' : 'Price')); ?></option>
-                                <option value="0-50" <?php echo e(request('price_range') == '0-50' ? 'selected' : ''); ?>>$0 - $50</option>
-                                <option value="50-100" <?php echo e(request('price_range') == '50-100' ? 'selected' : ''); ?>>$50 - $100</option>
-                                <option value="100-200" <?php echo e(request('price_range') == '100-200' ? 'selected' : ''); ?>>$100 - $200</option>
-                                <option value="200+" <?php echo e(request('price_range') == '200+' ? 'selected' : ''); ?>>$200+</option>
-                            </select>
-                            <i class="fa-solid fa-dollar-sign absolute left-4 top-1/2 -translate-y-1/2 text-green-500"></i>
-                            <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-green-400 text-sm"></i>
-                        </div>
-
-                        
-                        <div class="relative group">
-                            <select name="sort" onchange="this.form.submit()" 
-                                    class="appearance-none pl-12 pr-10 py-3.5 rounded-xl bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-100 hover:border-amber-300 focus:border-amber-400 outline-none font-semibold text-gray-700 cursor-pointer transition-all min-w-[150px]">
-                                <option value="latest" <?php echo e(request('sort', 'latest') == 'latest' ? 'selected' : ''); ?>><?php echo e(app()->getLocale() == 'ku' ? 'نوێترین' : (app()->getLocale() == 'ar' ? 'الأحدث' : 'Latest')); ?></option>
-                                <option value="price_low" <?php echo e(request('sort') == 'price_low' ? 'selected' : ''); ?>><?php echo e(app()->getLocale() == 'ku' ? 'نرخ ↑' : (app()->getLocale() == 'ar' ? 'سعر ↑' : 'Price ↑')); ?></option>
-                                <option value="price_high" <?php echo e(request('sort') == 'price_high' ? 'selected' : ''); ?>><?php echo e(app()->getLocale() == 'ku' ? 'نرخ ↓' : (app()->getLocale() == 'ar' ? 'سعر ↓' : 'Price ↓')); ?></option>
-                            </select>
-                            <i class="fa-solid fa-arrow-up-wide-short absolute left-4 top-1/2 -translate-y-1/2 text-amber-500"></i>
-                            <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-amber-400 text-sm"></i>
-                        </div>
-
-                        
-                        <?php if(request()->hasAny(['category', 'price_range', 'sort', 'search'])): ?>
-                            <a href="<?php echo e(route('products.index')); ?>" 
-                               class="inline-flex items-center gap-2 px-5 py-3.5 rounded-xl bg-red-50 text-red-600 hover:bg-red-100 font-bold transition-all border-2 border-red-100 hover:border-red-200 hover:scale-105">
-                                <i class="fa-solid fa-xmark"></i>
-                                <?php echo e(app()->getLocale() == 'ku' ? 'پاککردنەوە' : (app()->getLocale() == 'ar' ? 'مسح' : 'Clear')); ?>
-
-                            </a>
-                        <?php endif; ?>
-                    </form>
+                    </div>
                 </div>
-            </div>
+            </section>
 
             
-            <div class="flex items-center justify-between mb-8">
-                <div>
-                    <h2 class="text-2xl sm:text-3xl font-black text-gray-900">
+            <section>
+                
+                <div class="flex items-center justify-between mb-5">
+                    <h2 class="text-lg font-bold text-white">
                         <?php echo e(app()->getLocale() == 'ku' ? 'بەرهەمەکان' : (app()->getLocale() == 'ar' ? 'المنتجات' : 'Products')); ?>
 
-                        <span class="text-purple-600">(<?php echo e($products->total()); ?>)</span>
                     </h2>
-                </div>
-            </div>
-
-            
-            <?php if(count($products)): ?>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
-                    <?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <?php echo $__env->make('products.partials.product-card', ['product' => $product], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <select name="sort" onchange="window.location.href='<?php echo e(route('products.index')); ?>?sort='+this.value+'&category=<?php echo e(request('category')); ?>&search=<?php echo e(request('search')); ?>'" 
+                            class="text-sm text-white/70 bg-transparent outline-none cursor-pointer">
+                        <option value="latest" <?php echo e(request('sort') == 'latest' ? 'selected' : ''); ?>><?php echo e(app()->getLocale() == 'ku' ? 'نوێترین' : (app()->getLocale() == 'ar' ? 'الأحدث' : 'Latest')); ?></option>
+                        <option value="price_low" <?php echo e(request('sort') == 'price_low' ? 'selected' : ''); ?>><?php echo e(app()->getLocale() == 'ku' ? 'نرخ ↑' : (app()->getLocale() == 'ar' ? 'السعر ↑' : 'Price ↑')); ?></option>
+                        <option value="price_high" <?php echo e(request('sort') == 'price_high' ? 'selected' : ''); ?>><?php echo e(app()->getLocale() == 'ku' ? 'نرخ ↓' : (app()->getLocale() == 'ar' ? 'السعر ↓' : 'Price ↓')); ?></option>
+                    </select>
                 </div>
 
                 
-                <div class="mt-16 flex justify-center">
-                    <div class="bg-white rounded-2xl shadow-xl shadow-purple-500/5 p-4 border border-gray-100">
+                <?php if(count($products)): ?>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+                        <?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            
+                            <article class="group">
+                                <a href="<?php echo e(route('products.show', $product)); ?>" class="block">
+                                    <div class="bg-white/10 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/10 hover:border-white/20 hover:bg-white/15 transition-all duration-300 hover:-translate-y-1">
+                                        
+                                        
+                                        <div class="relative aspect-square p-3 bg-white/5">
+                                            
+                                            <?php if($product->image): ?>
+                                                <img src="<?php echo e(asset('storage/' . $product->image)); ?>" 
+                                                     alt="<?php echo e($product->name); ?>"
+                                                     class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500"
+                                                     loading="lazy">
+                                            <?php else: ?>
+                                                <div class="w-full h-full flex items-center justify-center">
+                                                    <i class="fa-solid fa-image text-3xl text-gray-300"></i>
+                                                </div>
+                                            <?php endif; ?>
+                                            
+                                            
+                                            <div class="absolute top-4 left-4 flex items-center gap-1 px-2 py-1 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm">
+                                                <i class="fa-solid fa-star text-amber-400 text-[10px]"></i>
+                                                <span class="text-[10px] font-semibold text-gray-700">4.<?php echo e(rand(5,9)); ?></span>
+                                            </div>
+                                            
+                                            
+                                            <button class="absolute top-4 right-4 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-sm hover:bg-rose-500 hover:text-white transition-all group/heart">
+                                                <i class="fa-regular fa-heart text-xs text-gray-500 group-hover/heart:text-white"></i>
+                                            </button>
+                                            
+                                            
+                                            <?php if($product->discount_price): ?>
+                                                <div class="absolute bottom-4 left-4 px-2 py-1 bg-rose-500 rounded-lg">
+                                                    <span class="text-[10px] font-bold text-white">-<?php echo e(round((($product->price - $product->discount_price) / $product->price) * 100)); ?>%</span>
+                                                </div>
+                                            <?php endif; ?>
+                                            
+                                            
+                                            <?php if($product->created_at >= now()->subDays(7) && !$product->discount_price): ?>
+                                                <div class="absolute bottom-4 left-4 px-2 py-1 bg-emerald-500 rounded-lg">
+                                                    <span class="text-[10px] font-bold text-white"><?php echo e(app()->getLocale() == 'ku' ? 'نوێ' : (app()->getLocale() == 'ar' ? 'جديد' : 'NEW')); ?></span>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                        
+                                        
+                                        <div class="p-4">
+                                            
+                                            <?php if($product->category): ?>
+                                                <span class="text-[10px] text-cyan-400 font-medium uppercase tracking-wider">
+                                                    <?php echo e($product->category->name); ?>
+
+                                                </span>
+                                            <?php endif; ?>
+                                            
+                                            
+                                            <h3 class="text-sm font-semibold text-white mt-1 line-clamp-1 group-hover:text-cyan-400 transition-colors">
+                                                <?php echo e($product->name); ?>
+
+                                            </h3>
+                                            
+                                            
+                                            <div class="flex items-center gap-2 mt-2">
+                                                <?php if($product->discount_price): ?>
+                                                    <span class="text-base font-bold text-white">$<?php echo e(number_format($product->discount_price, 0)); ?></span>
+                                                    <span class="text-xs text-white/50 line-through">$<?php echo e(number_format($product->price, 0)); ?></span>
+                                                <?php else: ?>
+                                                    <span class="text-base font-bold text-white">$<?php echo e(number_format($product->price, 0)); ?></span>
+                                                <?php endif; ?>
+                                            </div>
+                                            
+                                            
+                                            <div class="flex items-center gap-1.5 mt-3">
+                                                <span class="w-4 h-4 rounded-full bg-gray-900 ring-2 ring-white/30 shadow-sm"></span>
+                                                <span class="w-4 h-4 rounded-full bg-blue-500 ring-2 ring-white/30 shadow-sm"></span>
+                                                <span class="w-4 h-4 rounded-full bg-rose-400 ring-2 ring-white/30 shadow-sm"></span>
+                                                <span class="text-[10px] text-white/50 ml-1">+3</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </article>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </div>
+
+                    
+                    <div class="mt-10 flex justify-center">
                         <?php echo e($products->links()); ?>
 
                     </div>
-                </div>
-            <?php else: ?>
-                
-                <div class="text-center py-24">
-                    <div class="w-40 h-40 bg-gradient-to-br from-purple-100 to-fuchsia-100 rounded-full flex items-center justify-center mx-auto mb-8 animate-pulse">
-                        <i class="fa-solid fa-box-open text-6xl text-purple-300"></i>
+                <?php else: ?>
+                    
+                    <div class="text-center py-20">
+                        <div class="w-24 h-24 bg-white/10 backdrop-blur-xl rounded-full flex items-center justify-center mx-auto mb-6 border border-white/10">
+                            <i class="fa-solid fa-box-open text-3xl text-cyan-400"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">
+                            <?php echo e(app()->getLocale() == 'ku' ? 'هیچ بەرهەمێک نەدۆزرایەوە' : (app()->getLocale() == 'ar' ? 'لا توجد منتجات' : 'No products found')); ?>
+
+                        </h3>
+                        <p class="text-white/60 text-sm mb-6">
+                            <?php echo e(app()->getLocale() == 'ku' ? 'تکایە فلتەرەکان بگۆڕە' : (app()->getLocale() == 'ar' ? 'جرب تغيير الفلاتر' : 'Try changing filters')); ?>
+
+                        </p>
+                        <a href="<?php echo e(route('products.index')); ?>" 
+                           class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-2xl font-semibold text-sm shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 transition-all">
+                            <i class="fa-solid fa-rotate-right"></i>
+                            <?php echo e(app()->getLocale() == 'ku' ? 'هەموو بەرهەمەکان' : (app()->getLocale() == 'ar' ? 'جميع المنتجات' : 'View All')); ?>
+
+                        </a>
                     </div>
-                    <h3 class="text-3xl font-black text-gray-900 mb-4">
-                        <?php echo e(app()->getLocale() == 'ku' ? 'هیچ بەرهەمێک نەدۆزرایەوە' : (app()->getLocale() == 'ar' ? 'لم يتم العثور على منتجات' : 'No products found')); ?>
+                <?php endif; ?>
+            </section>
+        </main>
 
-                    </h3>
-                    <p class="text-gray-500 mb-8 text-lg max-w-md mx-auto">
-                        <?php echo e(app()->getLocale() == 'ku' ? 'تکایە فلتەرەکان بگۆڕە' : (app()->getLocale() == 'ar' ? 'يرجى تغيير الفلاتر' : 'Try changing filters')); ?>
-
-                    </p>
-                    <a href="<?php echo e(route('products.index')); ?>" 
-                       class="inline-flex items-center gap-3 bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white px-8 py-4 rounded-2xl font-bold hover:shadow-xl hover:shadow-purple-500/30 transition-all hover:-translate-y-1">
-                        <i class="fa-solid fa-rotate-right"></i>
-                        <?php echo e(app()->getLocale() == 'ku' ? 'هەموو بەرهەمەکان' : (app()->getLocale() == 'ar' ? 'جميع المنتجات' : 'All Products')); ?>
-
-                    </a>
-                </div>
-            <?php endif; ?>
-        </div>
-    </section>
+        
+    <style>
+        /* Hide scrollbar but allow scrolling */
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal8a240419d16b3c1a159498153f053ed2)): ?>
